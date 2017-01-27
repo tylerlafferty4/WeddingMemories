@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C5E1E3921E700271B4F /* CustomAlertView.swift */; };
+		D8002C611E39281E00271B4F /* WMShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C601E39281E00271B4F /* WMShared.swift */; };
 		D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8120CC21E37CD0D003223CC /* AppDelegate.swift */; };
 		D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8120CC41E37CD0D003223CC /* ViewController.swift */; };
 		D8120CC81E37CD0D003223CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC61E37CD0D003223CC /* Main.storyboard */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D8002C5E1E3921E700271B4F /* CustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
+		D8002C601E39281E00271B4F /* WMShared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMShared.swift; sourceTree = "<group>"; };
 		D8120CBF1E37CD0D003223CC /* WeddingMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8120CC21E37CD0D003223CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8120CC41E37CD0D003223CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 				D8120CC91E37CD0D003223CC /* Assets.xcassets */,
 				D8120CCB1E37CD0D003223CC /* LaunchScreen.storyboard */,
 				D8120CCE1E37CD0D003223CC /* Info.plist */,
+				D8002C5E1E3921E700271B4F /* CustomAlertView.swift */,
+				D8002C601E39281E00271B4F /* WMShared.swift */,
 			);
 			path = WeddingMemories;
 			sourceTree = "<group>";
@@ -96,6 +102,7 @@
 				TargetAttributes = {
 					D8120CBE1E37CD0D003223CC = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 7FQDNVV9B5;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -136,6 +143,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8002C611E39281E00271B4F /* WMShared.swift in Sources */,
+				D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */,
 				D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */,
 				D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */,
 			);
@@ -258,11 +267,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7FQDNVV9B5;
 				INFOPLIST_FILE = WeddingMemories/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lafftyl.WeddingMemories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -270,11 +281,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7FQDNVV9B5;
 				INFOPLIST_FILE = WeddingMemories/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lafftyl.WeddingMemories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -297,6 +310,7 @@
 				D8120CD31E37CD0D003223CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
