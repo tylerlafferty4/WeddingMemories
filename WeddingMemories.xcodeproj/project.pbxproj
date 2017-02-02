@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		70C28662EE5234DA6709858E /* Pods_WeddingMemories.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A383056FA71511CC0555FCF6 /* Pods_WeddingMemories.framework */; };
 		D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C5E1E3921E700271B4F /* CustomAlertView.swift */; };
 		D8002C611E39281E00271B4F /* WMShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C601E39281E00271B4F /* WMShared.swift */; };
 		D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8120CC21E37CD0D003223CC /* AppDelegate.swift */; };
@@ -14,9 +15,14 @@
 		D8120CC81E37CD0D003223CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC61E37CD0D003223CC /* Main.storyboard */; };
 		D8120CCA1E37CD0D003223CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC91E37CD0D003223CC /* Assets.xcassets */; };
 		D8120CCD1E37CD0D003223CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CCB1E37CD0D003223CC /* LaunchScreen.storyboard */; };
+		D8211E8D1E40CBD60007C422 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */; };
+		D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B34341E413347004F7CD9 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		46B5D3BD8647B38CF062369E /* Pods-WeddingMemories.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeddingMemories.release.xcconfig"; path = "Pods/Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories.release.xcconfig"; sourceTree = "<group>"; };
+		7ACB78873D763592DDA8F0BB /* Pods-WeddingMemories.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeddingMemories.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories.debug.xcconfig"; sourceTree = "<group>"; };
+		A383056FA71511CC0555FCF6 /* Pods_WeddingMemories.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeddingMemories.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8002C5E1E3921E700271B4F /* CustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		D8002C601E39281E00271B4F /* WMShared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMShared.swift; sourceTree = "<group>"; };
 		D8120CBF1E37CD0D003223CC /* WeddingMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -26,6 +32,8 @@
 		D8120CC91E37CD0D003223CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8120CCC1E37CD0D003223CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8120CCE1E37CD0D003223CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D85B34341E413347004F7CD9 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +41,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70C28662EE5234DA6709858E /* Pods_WeddingMemories.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D57936283890CDDA4B5242C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7ACB78873D763592DDA8F0BB /* Pods-WeddingMemories.debug.xcconfig */,
+				46B5D3BD8647B38CF062369E /* Pods-WeddingMemories.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D8120CB61E37CD0D003223CC = {
 			isa = PBXGroup;
 			children = (
 				D8120CC11E37CD0D003223CC /* WeddingMemories */,
 				D8120CC01E37CD0D003223CC /* Products */,
+				2D57936283890CDDA4B5242C /* Pods */,
+				F367D70789D2CE38AC411652 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +78,7 @@
 		D8120CC11E37CD0D003223CC /* WeddingMemories */ = {
 			isa = PBXGroup;
 			children = (
+				D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */,
 				D8120CC21E37CD0D003223CC /* AppDelegate.swift */,
 				D8120CC41E37CD0D003223CC /* ViewController.swift */,
 				D8120CC61E37CD0D003223CC /* Main.storyboard */,
@@ -66,8 +87,17 @@
 				D8120CCE1E37CD0D003223CC /* Info.plist */,
 				D8002C5E1E3921E700271B4F /* CustomAlertView.swift */,
 				D8002C601E39281E00271B4F /* WMShared.swift */,
+				D85B34341E413347004F7CD9 /* CameraViewController.swift */,
 			);
 			path = WeddingMemories;
+			sourceTree = "<group>";
+		};
+		F367D70789D2CE38AC411652 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A383056FA71511CC0555FCF6 /* Pods_WeddingMemories.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,9 +107,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8120CD11E37CD0D003223CC /* Build configuration list for PBXNativeTarget "WeddingMemories" */;
 			buildPhases = (
+				03636F7D012F64E4343A4161 /* [CP] Check Pods Manifest.lock */,
 				D8120CBB1E37CD0D003223CC /* Sources */,
 				D8120CBC1E37CD0D003223CC /* Frameworks */,
 				D8120CBD1E37CD0D003223CC /* Resources */,
+				4FB4A84C5D9F87E201023E71 /* [CP] Embed Pods Frameworks */,
+				6F6DAD6750349648991D3DB2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -133,10 +166,59 @@
 				D8120CCD1E37CD0D003223CC /* LaunchScreen.storyboard in Resources */,
 				D8120CCA1E37CD0D003223CC /* Assets.xcassets in Resources */,
 				D8120CC81E37CD0D003223CC /* Main.storyboard in Resources */,
+				D8211E8D1E40CBD60007C422 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03636F7D012F64E4343A4161 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4FB4A84C5D9F87E201023E71 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F6DAD6750349648991D3DB2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D8120CBB1E37CD0D003223CC /* Sources */ = {
@@ -144,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8002C611E39281E00271B4F /* WMShared.swift in Sources */,
+				D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */,
 				D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */,
 				D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */,
 				D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */,
@@ -265,6 +348,7 @@
 		};
 		D8120CD21E37CD0D003223CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7ACB78873D763592DDA8F0BB /* Pods-WeddingMemories.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7FQDNVV9B5;
@@ -279,6 +363,7 @@
 		};
 		D8120CD31E37CD0D003223CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46B5D3BD8647B38CF062369E /* Pods-WeddingMemories.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7FQDNVV9B5;

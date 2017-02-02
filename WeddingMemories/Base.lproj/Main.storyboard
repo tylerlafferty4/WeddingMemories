@@ -39,6 +39,7 @@
                                 <state key="normal" title="Snap a photo to Remember forever"/>
                                 <connections>
                                     <action selector="takePhotoWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1uA-Sk-nCH"/>
+                                    <segue destination="dJL-Q0-1TQ" kind="presentation" identifier="showCamera" id="KHI-dQ-G4l"/>
                                 </connections>
                             </button>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zn1-pC-kWb">
@@ -82,10 +83,10 @@
             </objects>
             <point key="canvasLocation" x="137.5" y="138.8671875"/>
         </scene>
-        <!--View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="X9O-lN-0OH">
             <objects>
-                <viewController id="dJL-Q0-1TQ" sceneMemberID="viewController">
+                <viewController id="dJL-Q0-1TQ" customClass="CameraViewController" customModule="WeddingMemories" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="O1q-g4-wVS"/>
                         <viewControllerLayoutGuide type="bottom" id="TRe-mN-50d"/>
@@ -93,12 +94,41 @@
                     <view key="view" contentMode="scaleToFill" id="Tbc-oY-KKb">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vpi-nk-ZJZ">
+                                <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7A-Bg-6ba">
+                                <rect key="frame" x="309" y="724" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="cpH-sY-xEp"/>
+                                    <constraint firstAttribute="height" constant="150" id="loS-oE-StQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="didPressTakePhoto:" destination="dJL-Q0-1TQ" eventType="touchUpInside" id="onI-zu-QKb"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="u7A-Bg-6ba" secondAttribute="bottom" constant="150" id="FE6-0t-Txs"/>
+                            <constraint firstItem="vpi-nk-ZJZ" firstAttribute="top" secondItem="O1q-g4-wVS" secondAttribute="bottom" id="bg6-Wx-CUx"/>
+                            <constraint firstAttribute="trailing" secondItem="vpi-nk-ZJZ" secondAttribute="trailing" id="dbJ-d5-TPF"/>
+                            <constraint firstItem="u7A-Bg-6ba" firstAttribute="centerX" secondItem="Tbc-oY-KKb" secondAttribute="centerX" id="kwl-QE-uKl"/>
+                            <constraint firstItem="vpi-nk-ZJZ" firstAttribute="leading" secondItem="Tbc-oY-KKb" secondAttribute="leading" id="l1L-0A-ebl"/>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="vpi-nk-ZJZ" secondAttribute="bottom" id="lMr-l6-8TA"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="previewView" destination="vpi-nk-ZJZ" id="ZyT-AH-QDp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="66b-9D-r8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="833" y="139"/>
+            <point key="canvasLocation" x="832.8125" y="138.8671875"/>
         </scene>
     </scenes>
     <resources>
