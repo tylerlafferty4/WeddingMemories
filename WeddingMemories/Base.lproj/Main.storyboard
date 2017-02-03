@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Wedding Memories-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="WeddingMemories" customModuleProvider="target" sceneMemberID="viewController">
@@ -22,10 +22,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ring_dress_engagement_couple_wedding_4361_2732x2732" translatesAutoresizingMaskIntoConstraints="NO" id="0r6-lF-bcw">
-                                <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                                <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wedding Memories" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l4K-71-J5M">
-                                <rect key="frame" x="237" y="100" width="295" height="131"/>
+                                <rect key="frame" x="237" y="144" width="295" height="131"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="dsa-4k-oJh"/>
                                     <constraint firstAttribute="height" constant="131" id="sny-Nr-FHO"/>
@@ -34,16 +34,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYQ-12-XfW">
-                                <rect key="frame" x="145" y="836" width="478" height="49"/>
+                                <rect key="frame" x="145" y="880" width="478" height="49"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                 <state key="normal" title="Snap a photo to Remember forever"/>
                                 <connections>
                                     <action selector="takePhotoWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1uA-Sk-nCH"/>
-                                    <segue destination="dJL-Q0-1TQ" kind="presentation" identifier="showCamera" id="KHI-dQ-G4l"/>
+                                    <segue destination="7Zf-43-LsK" kind="modal" identifier="showCamera" id="KHI-dQ-G4l"/>
                                 </connections>
                             </button>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zn1-pC-kWb">
-                                <rect key="frame" x="184" y="306" width="400" height="400"/>
+                                <rect key="frame" x="184" y="350" width="400" height="400"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Snapchat-1848010358" translatesAutoresizingMaskIntoConstraints="NO" id="LZl-cj-ezh">
                                         <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
@@ -73,6 +73,7 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="0r6-lF-bcw" secondAttribute="bottom" id="htY-bg-c7M"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Wedding Memories" id="01m-ly-1PR"/>
                     <connections>
                         <outlet property="circleView" destination="zn1-pC-kWb" id="vpa-kP-F9w"/>
                         <outlet property="imgView" destination="LZl-cj-ezh" id="pPL-Gl-1kH"/>
@@ -81,7 +82,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.5" y="138.8671875"/>
+            <point key="canvasLocation" x="903.125" y="138.8671875"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="X9O-lN-0OH">
@@ -99,40 +100,164 @@
                                 <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7A-Bg-6ba">
-                                <rect key="frame" x="309" y="724" width="150" height="150"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Snapchat-1848010358" translatesAutoresizingMaskIntoConstraints="NO" id="el4-mm-LAD">
+                                <rect key="frame" x="309" y="854" width="150" height="150"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="cpH-sY-xEp"/>
-                                    <constraint firstAttribute="height" constant="150" id="loS-oE-StQ"/>
+                                    <constraint firstAttribute="width" constant="150" id="4yR-mZ-5Jj"/>
+                                    <constraint firstAttribute="height" constant="150" id="HOb-Ff-YiC"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <state key="normal" title="Button"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" clipsSubviews="YES" alpha="0.65000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Mu-4c-tG1">
+                                <rect key="frame" x="309" y="854" width="150" height="150"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="O6B-Ec-U7x">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="L8t-8J-tK0"/>
+                                    <constraint firstAttribute="width" constant="150" id="Ngp-FR-ZIF"/>
+                                </constraints>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera-solid" translatesAutoresizingMaskIntoConstraints="NO" id="PkS-oe-NaU">
+                                <rect key="frame" x="346.5" y="894" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="IYF-9K-umh"/>
+                                    <constraint firstAttribute="height" constant="75" id="xi8-Y4-iQ2"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YPw-xk-eU9">
+                                <rect key="frame" x="20" y="854" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="PSU-1S-oo4"/>
+                                    <constraint firstAttribute="width" constant="150" id="mSW-R8-tWp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="94"/>
+                                <state key="normal" title="10"/>
                                 <connections>
-                                    <action selector="didPressTakePhoto:" destination="dJL-Q0-1TQ" eventType="touchUpInside" id="onI-zu-QKb"/>
+                                    <action selector="didPressTimer:" destination="dJL-Q0-1TQ" eventType="touchUpInside" id="kyM-ZF-ehQ"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="u7A-Bg-6ba" secondAttribute="bottom" constant="150" id="FE6-0t-Txs"/>
+                            <constraint firstItem="vpi-nk-ZJZ" firstAttribute="leading" secondItem="Tbc-oY-KKb" secondAttribute="leading" id="HJ5-4L-CLR"/>
+                            <constraint firstItem="YPw-xk-eU9" firstAttribute="leading" secondItem="Tbc-oY-KKb" secondAttribute="leading" constant="20" id="K6h-DJ-n9H"/>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="YPw-xk-eU9" secondAttribute="bottom" constant="20" id="LFO-wU-0Zy"/>
+                            <constraint firstItem="el4-mm-LAD" firstAttribute="centerX" secondItem="Tbc-oY-KKb" secondAttribute="centerX" id="PBI-Ut-ZoK"/>
+                            <constraint firstItem="PkS-oe-NaU" firstAttribute="centerX" secondItem="Tbc-oY-KKb" secondAttribute="centerX" id="PlG-w0-HbV"/>
+                            <constraint firstItem="8Mu-4c-tG1" firstAttribute="centerX" secondItem="Tbc-oY-KKb" secondAttribute="centerX" id="U1X-K8-S9c"/>
                             <constraint firstItem="vpi-nk-ZJZ" firstAttribute="top" secondItem="O1q-g4-wVS" secondAttribute="bottom" id="bg6-Wx-CUx"/>
-                            <constraint firstAttribute="trailing" secondItem="vpi-nk-ZJZ" secondAttribute="trailing" id="dbJ-d5-TPF"/>
-                            <constraint firstItem="u7A-Bg-6ba" firstAttribute="centerX" secondItem="Tbc-oY-KKb" secondAttribute="centerX" id="kwl-QE-uKl"/>
-                            <constraint firstItem="vpi-nk-ZJZ" firstAttribute="leading" secondItem="Tbc-oY-KKb" secondAttribute="leading" id="l1L-0A-ebl"/>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="PkS-oe-NaU" secondAttribute="bottom" constant="55" id="d0s-Qt-9vl"/>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="8Mu-4c-tG1" secondAttribute="bottom" constant="20" id="g8u-wa-1qb"/>
                             <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="vpi-nk-ZJZ" secondAttribute="bottom" id="lMr-l6-8TA"/>
+                            <constraint firstAttribute="trailing" secondItem="vpi-nk-ZJZ" secondAttribute="trailing" id="wRi-qu-qut"/>
+                            <constraint firstItem="TRe-mN-50d" firstAttribute="top" secondItem="el4-mm-LAD" secondAttribute="bottom" constant="20" id="xqN-qQ-f4K"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="AXm-VQ-h8k"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="blurView" destination="8Mu-4c-tG1" id="F3k-hn-nII"/>
+                        <outlet property="camImg" destination="PkS-oe-NaU" id="hjX-tv-CUp"/>
+                        <outlet property="countdownBtn" destination="YPw-xk-eU9" id="QnW-lN-vj3"/>
+                        <outlet property="photoCapture" destination="el4-mm-LAD" id="ihE-hM-YTV"/>
                         <outlet property="previewView" destination="vpi-nk-ZJZ" id="ZyT-AH-QDp"/>
+                        <segue destination="Rp8-Fs-KTr" kind="show" identifier="showPreview" id="Ge5-Vq-dtw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="66b-9D-r8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="832.8125" y="138.8671875"/>
+            <point key="canvasLocation" x="2364.0625" y="138.8671875"/>
+        </scene>
+        <!--Preview View Controller-->
+        <scene sceneID="e3v-GL-Mb7">
+            <objects>
+                <viewController id="Rp8-Fs-KTr" customClass="PreviewViewController" customModule="WeddingMemories" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BtW-SO-3kr"/>
+                        <viewControllerLayoutGuide type="bottom" id="iwE-Ic-s4x"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1zd-Qj-DIU">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SW7-ZW-7Od">
+                                <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMR-w0-U4A">
+                                <rect key="frame" x="523" y="859" width="160" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="GNb-Wz-igC"/>
+                                    <constraint firstAttribute="height" constant="80" id="t6F-an-boK"/>
+                                </constraints>
+                                <state key="normal" image="checkmark"/>
+                                <connections>
+                                    <action selector="usePhoto:" destination="Rp8-Fs-KTr" eventType="touchUpInside" id="EPq-nz-UZn"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dsi-HT-4ig">
+                                <rect key="frame" x="85" y="859" width="160" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="MS0-Yo-F01"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="OfR-oc-Wvk"/>
+                                    <constraint firstAttribute="height" constant="80" id="bxn-B2-jG5"/>
+                                    <constraint firstAttribute="width" constant="160" id="soJ-FW-SHt"/>
+                                </constraints>
+                                <state key="normal" image="X"/>
+                                <connections>
+                                    <action selector="retakePhoto:" destination="Rp8-Fs-KTr" eventType="touchUpInside" id="mH9-NI-vxb"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="iwE-Ic-s4x" firstAttribute="top" secondItem="Dsi-HT-4ig" secondAttribute="bottom" constant="85" id="3Gq-ww-FFD"/>
+                            <constraint firstItem="Dsi-HT-4ig" firstAttribute="leading" secondItem="1zd-Qj-DIU" secondAttribute="leading" constant="85" id="QY9-cB-rvj"/>
+                            <constraint firstItem="iwE-Ic-s4x" firstAttribute="top" secondItem="HMR-w0-U4A" secondAttribute="bottom" constant="85" id="QdI-Rl-YPc"/>
+                            <constraint firstAttribute="trailing" secondItem="HMR-w0-U4A" secondAttribute="trailing" constant="85" id="aHP-Da-A0l"/>
+                            <constraint firstItem="iwE-Ic-s4x" firstAttribute="top" secondItem="SW7-ZW-7Od" secondAttribute="bottom" id="cna-C9-ULt"/>
+                            <constraint firstItem="SW7-ZW-7Od" firstAttribute="leading" secondItem="1zd-Qj-DIU" secondAttribute="leading" id="lCM-d6-fNC"/>
+                            <constraint firstAttribute="trailing" secondItem="SW7-ZW-7Od" secondAttribute="trailing" id="lm0-WQ-nxN"/>
+                            <constraint firstItem="SW7-ZW-7Od" firstAttribute="top" secondItem="BtW-SO-3kr" secondAttribute="bottom" id="nXb-S9-BJe"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="previewImgView" destination="SW7-ZW-7Od" id="nHF-lF-Ogr"/>
+                        <outlet property="retakeBtn" destination="Dsi-HT-4ig" id="p7Q-WU-aZf"/>
+                        <outlet property="usePhotoBtn" destination="HMR-w0-U4A" id="SIw-IC-Sws"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="akB-2L-yc8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3082.8125" y="138.8671875"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="1g5-tQ-F4Q">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="7Zf-43-LsK" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UeF-5x-HPF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="dJL-Q0-1TQ" kind="relationship" relationship="rootViewController" id="jAv-wc-xLp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="urZ-Tj-yHv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1598.4375" y="138.8671875"/>
         </scene>
     </scenes>
     <resources>
         <image name="Snapchat-1848010358" width="512" height="910"/>
+        <image name="X" width="256" height="256"/>
+        <image name="camera-solid" width="30" height="30"/>
+        <image name="checkmark" width="32" height="32"/>
         <image name="ring_dress_engagement_couple_wedding_4361_2732x2732" width="2732" height="2732"/>
     </resources>
 </document>

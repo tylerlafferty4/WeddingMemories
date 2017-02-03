@@ -14,7 +14,12 @@ import UIKit
 // ------------------------ ALERT VIEW -----------------------------
 // -------------------------------------------------------------------
 // -------------------------------------------------------------------
-public class CustomAlertView : UIView {
+
+enum AlertType {
+    case Text, TextField, Loader
+}
+
+class CustomAlertView : UIView {
     
     var alertBackgroundView : UIView!
     var closeAction:(()->Void)!
@@ -36,7 +41,7 @@ public class CustomAlertView : UIView {
     var contentWidth: CGFloat!
     var buttonWidth: CGFloat!
     
-    public func showAlertView(superview: UIView, title: String, text: String, img: String?=nil, confirmAction: CustomAlertAction?=nil, cancelAction: CustomAlertAction?=nil) {
+    func showAlertView(superview: UIView, title: String, text: String, type: AlertType, img: String?=nil, confirmAction: CustomAlertAction?=nil, cancelAction: CustomAlertAction?=nil) {
 
         // The two actions that get passed in
         confirm = confirmAction
@@ -65,15 +70,26 @@ public class CustomAlertView : UIView {
         }
         // Title
         setupTitleLabel(title: title)
+        
         // Message Text
-        setupMessageText(text: text)
+        switch type {
+        case .Text:
+            setupMessageText(text: text)
+        case .TextField:
+            setupTextField(text: text)
+        case .Loader:
+            break
+        }
+        
         // Add to padding
         yPos += padding
         buttonWidth = alertWidth
+        
         // Second cancel button
         if cancel != nil {
             setupCancelButton()
         }
+        
         // Confirm Button
         setupConfirmButton()
         yPos += buttonHeight
@@ -127,7 +143,7 @@ public class CustomAlertView : UIView {
 
 // MARK: Setup Functions
 extension CustomAlertView {
-    // Setup the image view
+    /// Setup the image view
     func setupImageView(img : String) {
         let iconImageView : UIImageView! = UIImageView()
         let image = UIImage(named: img)?.withRenderingMode(.alwaysTemplate)
@@ -142,7 +158,7 @@ extension CustomAlertView {
         yPos += padding
     }
     
-    // Setup the title Label
+    /// Setup the title Label
     func setupTitleLabel(title : String) {
         let titleLbl = UILabel()
         titleLbl.textColor = UIColor.white
@@ -161,11 +177,9 @@ extension CustomAlertView {
         alertBackgroundView.addSubview(titleLbl)
     }
     
-    // Setup message text
-    func setupMessageText(text : String) {
+    /// Setup message text field
+    func setupTextField(text : String) {
         let textView = UITextField()
-//        textView.isUserInteractionEnabled = true
-//        textView.isEditable = false
         textView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         textView.textColor = UIColor.white
         textView.textAlignment = .center
@@ -184,7 +198,32 @@ extension CustomAlertView {
         alertBackgroundView.addSubview(textView)
     }
     
-    // Setup Cancel Button
+    /// Setup message text
+    func setupMessageText(text : String) {
+        let textView = UITextView()
+        textView.isUserInteractionEnabled = true
+        textView.isEditable = false
+        textView.textColor = UIColor.white
+        textView.textAlignment = .center
+        textView.font = UIFont(name: "HelveticaNeue", size: 16)
+        textView.backgroundColor = UIColor.clear
+        textView.text = text
+        let textString = textView.text! as NSString
+        let textAttr = [NSFontAttributeName:textView.font as AnyObject]
+        let realSize = textView.sizeThatFits(CGSize(width: contentWidth, height: CGFloat.greatestFiniteMagnitude))//CGSizeMake(contentWidth, CGFloat.max))
+        let textSize = CGSize(width: contentWidth, height: CGFloat(fmaxf(Float(90.0), Float(realSize.height))))
+        let textRect = textString.boundingRect(with: textSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: textAttr, context: nil)
+        textView.frame = CGRect(x: padding, y: yPos, width: alertWidth - (padding*2), height: ceil(textRect.size.height)*2)
+        yPos += ceil(textRect.size.height) + padding/2
+        alertBackgroundView.addSubview(textView)
+    }
+    
+    /// Setup the alert with a loader
+    func setupLoader() {
+        
+    }
+    
+    /// Setup Cancel Button
     func setupCancelButton() {
         buttonWidth = alertWidth/2
         cancelButton = UIButton()
@@ -204,7 +243,7 @@ extension CustomAlertView {
         cancelButton.addSubview(cancelButtonLabel)
     }
     
-    // Setup Confirm Button
+    /// Setup Confirm Button
     func setupConfirmButton() {
         dismissButton = UIButton()
         dismissButton.backgroundColor = UIColor.darkGray
@@ -230,12 +269,9 @@ extension CustomAlertView {
 
 // MARK: - Text Field Delegate
 extension CustomAlertView : UITextFieldDelegate {
-    
     func textFieldDidChange(_ textField: UITextField) {
         if let email = textField.text {
-            if email.contains("@") {
-                WMShared.sharedInstance.emailAddress = textField.text!
-            }
+            WMShared.sharedInstance.userContact = email
         }
     }
 }
@@ -261,7 +297,7 @@ extension CustomAlertView {
 // -- These are used to call functions in the parent
 // -- class when a button on the alert view is clicked
 // -------------------------------------------------
-public class CustomAlertAction : NSObject {
+class CustomAlertAction : NSObject {
     
     public var handler : () -> Void
     public var title : String

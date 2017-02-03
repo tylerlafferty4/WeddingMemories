@@ -17,6 +17,7 @@
 		D8120CCD1E37CD0D003223CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CCB1E37CD0D003223CC /* LaunchScreen.storyboard */; };
 		D8211E8D1E40CBD60007C422 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */; };
 		D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B34341E413347004F7CD9 /* CameraViewController.swift */; };
+		D85B34371E4376BC004F7CD9 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		D8120CCE1E37CD0D003223CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D85B34341E413347004F7CD9 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				D8002C5E1E3921E700271B4F /* CustomAlertView.swift */,
 				D8002C601E39281E00271B4F /* WMShared.swift */,
 				D85B34341E413347004F7CD9 /* CameraViewController.swift */,
+				D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */,
 			);
 			path = WeddingMemories;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */,
 				D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */,
 				D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */,
+				D85B34371E4376BC004F7CD9 /* PreviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

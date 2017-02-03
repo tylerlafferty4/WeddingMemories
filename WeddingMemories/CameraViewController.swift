@@ -12,26 +12,39 @@ import Firebase
 
 class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
-    var captureSesssion : AVCaptureSession!
-    var cameraOutput : AVCapturePhotoOutput!
-    var previewLayer : AVCaptureVideoPreviewLayer!
+    // -- Outlets --
+    @IBOutlet var previewView: UIView!
+    @IBOutlet var countdownBtn: UIButton!
+    @IBOutlet var captureBtn: UIButton!
+    @IBOutlet var photoCapture: UIImageView!
+    @IBOutlet var blurView: UIVisualEffectView!
+    @IBOutlet var camImg: UIImageView!
     
-    var capturedImage: UIImageView!
-    @IBOutlet weak var previewView: UIView!
-    
-    // Firebase Storage
-    var storage = FIRStorage.storage()
-    var storageRef = FIRStorageReference()
+    // -- Vars --
+    var captureSesssion: AVCaptureSession!
+    var cameraOutput: AVCapturePhotoOutput!
+    var previewLayer: AVCaptureVideoPreviewLayer!
+    var capturedImage: UIImage!
+    var secondsRemaining: Int = 10
+    var timer: Timer! = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // FireBase storage init
-        storageRef = storage.reference(forURL: "gs://wedding-memories.appspot.com")
+        photoCapture.layer.cornerRadius = photoCapture.frame.width/2
+        blurView.layer.cornerRadius = blurView.frame.width/2
+        let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.capturePhoto))
+        camImg.isUserInteractionEnabled = true
+        camImg.addGestureRecognizer(tap)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Reset the countdown time
+        secondsRemaining = 10
+        countdownBtn.setTitle("\(secondsRemaining)", for: .normal)
+        
+        // Setup the camera session
         captureSesssion = AVCaptureSession()
         captureSesssion.sessionPreset = AVCaptureSessionPresetPhoto
         cameraOutput = AVCapturePhotoOutput()
@@ -56,9 +69,38 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }
 
     }
+}
+
+// MARK: - Take Photo
+extension CameraViewController {
     
-    // Take picture button
+    /// Timer button
+    @IBAction func didPressTimer(_ sender: UIButton) {
+        beginTimer()
+    }
+    
+    /// Take picture button
     @IBAction func didPressTakePhoto(_ sender: UIButton) {
+        capturePhoto()
+    }
+    
+    /// Starts a timer
+    func beginTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(CameraViewController.countdownText), userInfo: nil, repeats: true)
+    }
+    
+    /// Updates the countdown label
+    func countdownText() {
+        secondsRemaining -= 1
+        countdownBtn.setTitle("\(secondsRemaining)", for: .normal)
+        if secondsRemaining == 0 {
+            timer.invalidate()
+            capturePhoto()
+        }
+    }
+    
+    /// Captures the photo
+    func capturePhoto() {
         let settings = AVCapturePhotoSettings()
         let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
         let previewFormat = [
@@ -74,7 +116,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         
         if let error = error {
-            print("error occure : \(error.localizedDescription)")
+            print("error occured : \(error.localizedDescription)")
         }
         
         if  let sampleBuffer = photoSampleBuffer,
@@ -86,88 +128,18 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
             let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
             
-            capturedImage = UIImageView()
-            capturedImage.image = image
-            uploadToFirebase(img: image)
+            capturedImage = image
+            performSegue(withIdentifier: "showPreview", sender: self)
         } else {
             print("some error here")
         }
     }
-    
-    // This method you can use somewhere you need to know camera permission   state
-    func askPermission() {
-        print("here")
-        let cameraPermissionStatus =  AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-        
-        switch cameraPermissionStatus {
-        case .authorized:
-            print("Already Authorized")
-        case .denied:
-            print("denied")
-            
-            let alert = UIAlertController(title: "Sorry :(" , message: "But  could you please grant permission for camera within device settings",  preferredStyle: .alert)
-            let action = UIAlertAction(title: "Ok", style: .cancel,  handler: nil)
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
-            
-        case .restricted:
-            print("restricted")
-        default:
-            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: {
-                [weak self]
-                (granted :Bool) -> Void in
-                
-                if granted == true {
-                    // User granted
-                    print("User granted")
-                    DispatchQueue.main.async(){
-                        //Do smth that you need in main thread
-                    }
-                }
-                else {
-                    // User Rejected
-                    print("User Rejected")
-                    
-                    DispatchQueue.main.async(){
-                        let alert = UIAlertController(title: "WHY?" , message:  "Camera it is the main feature of our application", preferredStyle: .alert)
-                        let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-                        alert.addAction(action)
-                        self?.present(alert, animated: true, completion: nil)  
-                    } 
-                }
-            });
-        }
-    }
 }
 
-// MARK: - Upload to Firebase
+// MARK: - Prepare for Segue
 extension CameraViewController {
-    func uploadToFirebase(img : UIImage) {
-        // Add the image as an attachment
-        if let imgData: Data = UIImagePNGRepresentation(img) {
-            print("Image converted to Data")
-            
-            // Create a reference to the file you want to upload
-            let riversRef = self.storageRef.child("images/test.jpg")//\(WMShared.sharedInstance.emailAddress).jpg")
-            
-            // Upload the file to the path "images/rivers.jpg"
-            let uploadTask = riversRef.put(imgData, metadata: nil) { (metadata, error) in
-                guard let metadata = metadata else {
-                    // Uh-oh, an error occurred!
-                    print("******An Error Occurred******")
-//                    self.displayFailedAlert()
-                    return
-                }
-                // Metadata contains file metadata such as size, content-type, and download URL.
-                let downloadURL = metadata.downloadURL
-                print(downloadURL)
-            }
-            
-            // Check the progress of the upload
-            let observer = uploadTask.observe(.progress) { snapshot in
-                // A progress event occured
-            }
-//            self.displaySentAlert()
-        }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! PreviewViewController
+        vc.takenPhoto = capturedImage
     }
 }

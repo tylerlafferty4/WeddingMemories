@@ -11,5 +11,5 @@ import Foundation
 class WMShared {
     
     static var sharedInstance: WMShared! = WMShared()
-    var emailAddress: String = ""
+    var userContact: String = ""
 }
