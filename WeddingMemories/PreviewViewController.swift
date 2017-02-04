@@ -45,6 +45,8 @@ class PreviewViewController: UIViewController {
         
         // Set the image view for the buttons
         usePhotoBtn.imageView?.contentMode = .scaleAspectFit
+        usePhotoBtn.imageView?.image = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
+        usePhotoBtn.imageView?.tintColor = UIColor.green
         retakeBtn.imageView?.contentMode = .scaleAspectFit
         
         viewProg.layer.cornerRadius = viewCornerRadius
