@@ -35,6 +35,8 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.capturePhoto))
         camImg.isUserInteractionEnabled = true
         camImg.addGestureRecognizer(tap)
+        camImg.image = UIImage(named: "camera-solid")?.withRenderingMode(.alwaysTemplate)
+        camImg.tintColor = UIColor.lightGray
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +69,10 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         } else {
             print("some problem here")
         }
-
+    }
+    
+    @IBAction func closeCamera(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -77,11 +82,6 @@ extension CameraViewController {
     /// Timer button
     @IBAction func didPressTimer(_ sender: UIButton) {
         beginTimer()
-    }
-    
-    /// Take picture button
-    @IBAction func didPressTakePhoto(_ sender: UIButton) {
-        capturePhoto()
     }
     
     /// Starts a timer

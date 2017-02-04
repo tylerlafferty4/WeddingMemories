@@ -16,7 +16,27 @@ import UIKit
 // -------------------------------------------------------------------
 
 enum AlertType {
-    case Text, TextField, Loader
+    case Text, Email, PhoneNumber
+}
+
+extension String {
+    //Validate Email
+    var isEmail: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", options: .caseInsensitive)
+            return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil
+        } catch {
+            return false
+        }
+    }
+    
+    // Validate PhoneNumber
+    var isPhoneNumber: Bool {
+        let PHONE_REGEX = "^\\d{3}-\\d{3}-\\d{4}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", PHONE_REGEX)
+        let result =  phoneTest.evaluate(with: self)
+        return result
+    }
 }
 
 class CustomAlertView : UIView {
@@ -29,6 +49,7 @@ class CustomAlertView : UIView {
     var dismissButton : UIButton!
     var cancelButton: UIButton!
     var blurView: UIVisualEffectView!
+    var alertType: AlertType!
     
     // Sizing setup
     let baseHeight: CGFloat = 400.0
@@ -43,6 +64,8 @@ class CustomAlertView : UIView {
     
     func showAlertView(superview: UIView, title: String, text: String, type: AlertType, img: String?=nil, confirmAction: CustomAlertAction?=nil, cancelAction: CustomAlertAction?=nil) {
 
+        alertType = type
+        
         // The two actions that get passed in
         confirm = confirmAction
         cancel = cancelAction
@@ -75,10 +98,10 @@ class CustomAlertView : UIView {
         switch type {
         case .Text:
             setupMessageText(text: text)
-        case .TextField:
+        case .Email:
             setupTextField(text: text)
-        case .Loader:
-            break
+        case .PhoneNumber:
+            setupTextField(text: text)
         }
         
         // Add to padding
@@ -186,7 +209,11 @@ extension CustomAlertView {
         textView.font = UIFont(name: "HelveticaNeue", size: 16)
         textView.backgroundColor = UIColor.clear
         textView.placeholder = text
-        textView.keyboardType = .emailAddress
+        if alertType == AlertType.Email {
+            textView.keyboardType = .emailAddress
+        } else if alertType == AlertType.PhoneNumber {
+            textView.keyboardType = .numberPad
+        }
         textView.delegate = self
         let textString = textView.text! as NSString
         let textAttr = [NSFontAttributeName:textView.font as AnyObject]
@@ -246,6 +273,11 @@ extension CustomAlertView {
     /// Setup Confirm Button
     func setupConfirmButton() {
         dismissButton = UIButton()
+        if alertType == AlertType.Email || alertType == AlertType.PhoneNumber {
+            dismissButton.isUserInteractionEnabled = false
+        } else {
+            dismissButton.isUserInteractionEnabled = true
+        }
         dismissButton.backgroundColor = UIColor.darkGray
         //dismissButton.addTarget(self, action: "buttonTap", forControlEvents: .TouchUpInside)
         dismissButton.addTarget(self, action: #selector(CustomAlertView.buttonTap), for: .touchUpInside)
@@ -270,8 +302,18 @@ extension CustomAlertView {
 // MARK: - Text Field Delegate
 extension CustomAlertView : UITextFieldDelegate {
     func textFieldDidChange(_ textField: UITextField) {
-        if let email = textField.text {
-            WMShared.sharedInstance.userContact = email
+        if let txt = textField.text {
+            if alertType == AlertType.Email {
+                if txt.isEmail {
+                    WMShared.sharedInstance.userContact = txt
+                    dismissButton.isUserInteractionEnabled = true
+                }
+            } else if alertType == AlertType.PhoneNumber {
+                if txt.isPhoneNumber {
+                    WMShared.sharedInstance.userContact = txt
+                    dismissButton.isUserInteractionEnabled = true
+                }
+            }
         }
     }
 }
