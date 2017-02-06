@@ -19,26 +19,6 @@ enum AlertType {
     case Text, Email, PhoneNumber
 }
 
-extension String {
-    //Validate Email
-    var isEmail: Bool {
-        do {
-            let regex = try NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", options: .caseInsensitive)
-            return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.characters.count)) != nil
-        } catch {
-            return false
-        }
-    }
-    
-    // Validate PhoneNumber
-    var isPhoneNumber: Bool {
-        let PHONE_REGEX = "^\\d{3}-\\d{3}-\\d{4}$"
-        let phoneTest = NSPredicate(format: "SELF MATCHES %@", PHONE_REGEX)
-        let result =  phoneTest.evaluate(with: self)
-        return result
-    }
-}
-
 class CustomAlertView : UIView {
     
     var alertBackgroundView : UIView!
@@ -123,7 +103,8 @@ class CustomAlertView : UIView {
         blurView.alpha = 0
         UIView.animate(withDuration: 0.6, delay: 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [], animations: { () -> Void in
             self.blurView.alpha = 1
-            self.alertBackgroundView.center = CGPoint(x: self.alertBackgroundView.center.x, y: superview.frame.height/2)
+            self.alertBackgroundView.alpha = 1
+            self.alertBackgroundView.center = CGPoint(x: self.alertBackgroundView.center.x, y: self.alertBackgroundView.frame.height + 20)
         }) { (Bool) -> Void in
             
         }
@@ -137,6 +118,7 @@ class CustomAlertView : UIView {
     func buttonTap() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: { () -> Void in
             self.blurView.alpha = 0
+            self.alertBackgroundView.alpha = 0
             self.alertBackgroundView.center.y += 500
         }, completion: { (Bool) -> Void in
             self.removeFromSuperview()
@@ -157,6 +139,7 @@ class CustomAlertView : UIView {
     func closeAlert() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: { () -> Void in
             self.blurView.alpha = 0
+            self.alertBackgroundView.alpha = 0
             self.alertBackgroundView.center.y += 500
         }, completion: { (Bool) -> Void in
             self.removeFromSuperview()
@@ -173,9 +156,9 @@ extension CustomAlertView {
         iconImageView.image = image
         iconImageView.tintColor = UIColor.white
         let centerX = (alertWidth-iconImageView.frame.width)/2
-        iconImageView.frame = CGRect(x: centerX, y: padding, width: (image?.size.width)!, height: (image?.size.height)!)
+        iconImageView.frame = CGRect(x: centerX, y: padding, width: 60, height: 60)
         iconImageView.center = CGPoint(x: alertWidth/2, y: iconImageView.center.y)
-        iconImageView.contentMode = .center
+        iconImageView.contentMode = .scaleAspectFit
         yPos += iconImageView.frame.height
         alertBackgroundView.addSubview(iconImageView)
         yPos += padding
@@ -203,12 +186,14 @@ extension CustomAlertView {
     /// Setup message text field
     func setupTextField(text : String) {
         let textView = UITextField()
+        textView.becomeFirstResponder()
         textView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         textView.textColor = UIColor.white
         textView.textAlignment = .center
         textView.font = UIFont(name: "HelveticaNeue", size: 16)
         textView.backgroundColor = UIColor.clear
         textView.placeholder = text
+        textView.autocorrectionType = .no
         if alertType == AlertType.Email {
             textView.keyboardType = .emailAddress
         } else if alertType == AlertType.PhoneNumber {
@@ -309,11 +294,34 @@ extension CustomAlertView : UITextFieldDelegate {
                     dismissButton.isUserInteractionEnabled = true
                 }
             } else if alertType == AlertType.PhoneNumber {
-                if txt.isPhoneNumber {
+                if checkPhoneNumber(text: textField.text!) > 10 {
+                    textField.deleteBackward()
+                } else if checkPhoneNumber(text: textField.text!) == 10 {
                     WMShared.sharedInstance.userContact = txt
                     dismissButton.isUserInteractionEnabled = true
+                } else {
+                    dismissButton.isUserInteractionEnabled = false
                 }
             }
+        }
+    }
+    
+    func checkPhoneNumber(text: String) -> Int {
+        let phone = text.replacingOccurrences(of: "-", with: "")
+        let number = phone.replacingOccurrences(of: "(", with: "")
+        let phoneNumber = number.replacingOccurrences(of: ")", with: "")
+        return phoneNumber.characters.count
+    }
+    
+    func checkPhoneLength(text: String?) -> Bool {
+        if let txt = text {
+            if txt.characters.count > 12 {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return true
         }
     }
 }

@@ -15,6 +15,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     // -- Outlets --
     @IBOutlet var previewView: UIView!
     @IBOutlet var countdownBtn: UIButton!
+    @IBOutlet var countdownLbl: UILabel!
     @IBOutlet var captureBtn: UIButton!
     @IBOutlet var photoCapture: UIImageView!
     @IBOutlet var blurView: UIVisualEffectView!
@@ -32,11 +33,16 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         super.viewDidLoad()
         photoCapture.layer.cornerRadius = photoCapture.frame.width/2
         blurView.layer.cornerRadius = blurView.frame.width/2
-        let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.capturePhoto))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.showTap))
         camImg.isUserInteractionEnabled = true
         camImg.addGestureRecognizer(tap)
         camImg.image = UIImage(named: "camera-solid")?.withRenderingMode(.alwaysTemplate)
         camImg.tintColor = UIColor.lightGray
+        countdownBtn.layer.cornerRadius = countdownBtn.frame.width/2
+        countdownLbl.layer.cornerRadius = countdownLbl.frame.width/2
+        countdownBtn.titleLabel?.numberOfLines = 0
+        countdownBtn.titleLabel?.textAlignment = .center
+        countdownBtn.setTitle("Start\nTimer", for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,7 +50,9 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
         // Reset the countdown time
         secondsRemaining = 10
-        countdownBtn.setTitle("\(secondsRemaining)", for: .normal)
+        countdownLbl.text = "\(secondsRemaining)"
+        countdownBtn.isHidden = false
+        countdownLbl.isHidden = true
         
         // Setup the camera session
         captureSesssion = AVCaptureSession()
@@ -59,7 +67,11 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
                 if (captureSesssion.canAddOutput(cameraOutput)) {
                     captureSesssion.addOutput(cameraOutput)
                     previewLayer = AVCaptureVideoPreviewLayer(session: captureSesssion)
-                    previewLayer.frame = previewView.bounds
+                    var bounds:CGRect = self.view.layer.bounds
+                    previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                    previewLayer?.bounds = bounds
+                    previewLayer?.position = CGPoint(x: bounds.midX, y: bounds.midY)
+                    previewLayer.connection.videoOrientation = .landscapeRight
                     previewView.layer.addSublayer(previewLayer)
                     captureSesssion.startRunning()
                 }
@@ -72,6 +84,9 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     }
     
     @IBAction func closeCamera(_ sender: UIButton) {
+        if timer != nil {
+            timer.invalidate()
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -81,7 +96,15 @@ extension CameraViewController {
     
     /// Timer button
     @IBAction func didPressTimer(_ sender: UIButton) {
-        beginTimer()
+        countdownBtn.isHidden = true
+        countdownLbl.isHidden = false
+        if let time = timer {
+            if time.isValid == false {
+                beginTimer()
+            }
+        } else {
+            beginTimer()
+        }
     }
     
     /// Starts a timer
@@ -92,7 +115,7 @@ extension CameraViewController {
     /// Updates the countdown label
     func countdownText() {
         secondsRemaining -= 1
-        countdownBtn.setTitle("\(secondsRemaining)", for: .normal)
+        countdownLbl.text = "\(secondsRemaining)"
         if secondsRemaining == 0 {
             timer.invalidate()
             capturePhoto()
@@ -118,7 +141,6 @@ extension CameraViewController {
         if let error = error {
             print("error occured : \(error.localizedDescription)")
         }
-        
         if  let sampleBuffer = photoSampleBuffer,
             let previewBuffer = previewPhotoSampleBuffer,
             let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer) {
@@ -126,12 +148,31 @@ extension CameraViewController {
             
             let dataProvider = CGDataProvider(data: dataImage as CFData)
             let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
-            let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
+//            let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
+            let image = UIImage(cgImage: cgImageRef)//, scale: 1.0, orientation: nil)
             
             capturedImage = image
             performSegue(withIdentifier: "showPreview", sender: self)
         } else {
             print("some error here")
+        }
+    }
+}
+
+// MARK: - Helpers
+extension CameraViewController {
+    func showTap() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.photoCapture.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.blurView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { (finished) in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.photoCapture.transform = CGAffineTransform.identity
+                self.blurView.transform = CGAffineTransform.identity
+            }, completion: { (bool) in
+                self.capturePhoto()
+            })
+            
         }
     }
 }

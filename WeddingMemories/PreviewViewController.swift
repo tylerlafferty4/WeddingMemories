@@ -18,14 +18,17 @@ class PreviewViewController: UIViewController {
     @IBOutlet var loadingView: UIView!
     @IBOutlet var activityInd: UIActivityIndicatorView!
     @IBOutlet var loadPercent: UILabel!
-    
+    @IBOutlet var sendChoices: UIView!
     @IBOutlet var viewProg: UIView! // your parent view, Just a blank view
     
+    var choicesShown: Bool = false
     
     let viewCornerRadius : CGFloat = 5
     var borderLayer : CAShapeLayer = CAShapeLayer()
     let progressLayer : CAShapeLayer = CAShapeLayer()
-
+    
+    // Blur View
+    var blur: UIVisualEffectView!
     
     // -- Set from other controller --
     var takenPhoto: UIImage!
@@ -43,12 +46,16 @@ class PreviewViewController: UIViewController {
         // Set the preview to image that was taken
         previewImgView.image = takenPhoto
         
+        sendChoices.layer.cornerRadius = 5
+        
         // Set the image view for the buttons
         usePhotoBtn.imageView?.contentMode = .scaleAspectFit
-        usePhotoBtn.imageView?.image = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
+        usePhotoBtn.setImage(image, for: .normal)
         usePhotoBtn.imageView?.tintColor = UIColor.green
         retakeBtn.imageView?.contentMode = .scaleAspectFit
         
+        loadingView.layer.cornerRadius = 5
         viewProg.layer.cornerRadius = viewCornerRadius
         drawProgressLayer()
     }
@@ -66,11 +73,25 @@ class PreviewViewController: UIViewController {
 // MARK: - Button Actions
 extension PreviewViewController {
     @IBAction func usePhoto(_ sender: Any) {
-        promptForEmail()
+        if choicesShown == false {
+            showChoices()
+        } else {
+            hideChoices()
+        }
     }
     
     @IBAction func retakePhoto(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func sendToEmail(_ sender: Any) {
+        hideChoices()
+        promptForEmail()
+    }
+    
+    @IBAction func sendToPhone(_ sender: Any) {
+        hideChoices()
+        promptForPhoneNumber()
     }
 }
 
@@ -112,13 +133,13 @@ extension PreviewViewController {
                 
                 // Update the label with the percent complete
                 let percentComplete = 100 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-                let rounded = percentComplete.rounded()
+                let rounded = Int(percentComplete.rounded())
                 self.loadPercent.text = "\(rounded)%"
                 
                 // Update the progress bar
-                let progress = CGFloat(snapshot.progress!.completedUnitCount/snapshot.progress!.totalUnitCount)
-                let prog = progress * self.viewProg.bounds.width - 10
-                self.rectProgress(incremented: prog)
+                let progress = Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+                let prog = progress * Double(self.viewProg.bounds.width - 10)
+                self.rectProgress(incremented: CGFloat(prog))
             }
         }
     }
@@ -136,7 +157,18 @@ extension PreviewViewController {
         let cancel = CustomAlertAction(title: "Cancel") { 
             
         }
-        emailAlert.showAlertView(superview: self.view, title: "Please enter your email address", text: "Please enter your email address", type: .Email, img: nil, confirmAction: confirm, cancelAction: cancel)
+        emailAlert.showAlertView(superview: self.view, title: "Please enter your email address", text: "example@gmail.com", type: .Email, img: nil, confirmAction: confirm, cancelAction: cancel)
+    }
+    
+    func promptForPhoneNumber() {
+        let emailAlert = CustomAlertView()
+        let confirm = CustomAlertAction(title: "Upload") {
+            self.uploadPhoto()
+        }
+        let cancel = CustomAlertAction(title: "Cancel") {
+            
+        }
+        emailAlert.showAlertView(superview: self.view, title: "Please enter your phone number", text: "Phone Number", type: .PhoneNumber, img: nil, confirmAction: confirm, cancelAction: cancel)
     }
     
     /// Call this method after the photo has been uploaded
@@ -161,8 +193,38 @@ extension PreviewViewController {
 // MARK: - Helpers
 extension PreviewViewController {
     
+    func addBlurView() {
+        blur = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        blur.frame = self.view.frame
+        self.view.addSubview(blur)
+    }
+    
+    func hideBlurView() {
+        blur.removeFromSuperview()
+    }
+    
+    /// Prompts the user for email or phone number sending
+    func showChoices() {
+        choicesShown = true
+        UIView.animate(withDuration: 1) {
+            self.sendChoices.isHidden = false
+            self.sendChoices.alpha = 1
+        }
+    }
+    
+    /// Hides the choices of how to send the image
+    func hideChoices() {
+        choicesShown = false
+        UIView.animate(withDuration: 1) {
+            self.sendChoices.isHidden = true
+            self.sendChoices.alpha = 0
+        }
+    }
+    
     /// Unhides the progress view
     func unhideLoader() {
+        addBlurView()
+        self.view.bringSubview(toFront: loadingView)
         activityInd.startAnimating()
         retakeBtn.isUserInteractionEnabled = false
         usePhotoBtn.isUserInteractionEnabled = false
@@ -174,6 +236,7 @@ extension PreviewViewController {
     
     /// Hides the progress view
     func hideLoader() {
+        hideBlurView()
         activityInd.stopAnimating()
         retakeBtn.isUserInteractionEnabled = true
         usePhotoBtn.isUserInteractionEnabled = true
@@ -195,6 +258,7 @@ extension PreviewViewController {
         borderLayer.fillColor = UIColor.black.cgColor
         borderLayer.strokeEnd = 0
         viewProg.layer.addSublayer(borderLayer)
+        viewProg.bringSubview(toFront: loadPercent)
     }
     
     //Make sure the value that you want in the function `rectProgress` that is going to define
@@ -208,7 +272,7 @@ extension PreviewViewController {
             let bezierPathProg = UIBezierPath(roundedRect: CGRect(x: 5, y: 5, width: incremented, height: viewProg.bounds.height-10 ), cornerRadius: viewCornerRadius)
             bezierPathProg.close()
             progressLayer.path = bezierPathProg.cgPath
-            progressLayer.fillColor = UIColor.white.cgColor
+            progressLayer.fillColor = UIColor.green.cgColor
             borderLayer.addSublayer(progressLayer)
         }
     }

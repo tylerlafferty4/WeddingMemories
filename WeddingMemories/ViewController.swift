@@ -27,6 +27,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         circleView.layer.shadowRadius = 20
         
         imgView.layer.cornerRadius = imgView.frame.width/2
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.showTap))
+        imgView.addGestureRecognizer(tap)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,6 +41,29 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
 // MARK: - Photo Button
 extension ViewController {
     @IBAction func takePhoto(sender: UIButton) {
-        performSegue(withIdentifier: "showCamera", sender: self)    
+        showCamera()
+    }
+}
+
+// MARK: - Helpers
+extension ViewController {
+    
+    func showCamera() {
+        performSegue(withIdentifier: "showCamera", sender: self)
+    }
+    
+    func showTap() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.imgView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.circleView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { (finished) in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.imgView.transform = CGAffineTransform.identity
+                self.circleView.transform = CGAffineTransform.identity
+            }, completion: { (bool) in
+                self.showCamera()
+            })
+        
+        }
     }
 }
