@@ -27,7 +27,7 @@ class PreviewViewController: UIViewController {
     var borderLayer : CAShapeLayer = CAShapeLayer()
     let progressLayer : CAShapeLayer = CAShapeLayer()
     
-    // Blur View
+    // -- Blur View --
     var blur: UIVisualEffectView!
     
     // -- Set from other controller --
@@ -46,7 +46,15 @@ class PreviewViewController: UIViewController {
         // Set the preview to image that was taken
         previewImgView.image = takenPhoto
         
-        sendChoices.layer.cornerRadius = 5
+        // Add Tap gesture to image view to dismiss choices
+        let tap = UITapGestureRecognizer(target: self, action: #selector(PreviewViewController.touchedView))
+        previewImgView.addGestureRecognizer(tap)
+        
+        sendChoices.layer.cornerRadius = viewCornerRadius
+        sendChoices.layer.shadowColor = UIColor.black.cgColor
+        sendChoices.layer.shadowOffset = CGSize(width: 0, height: 20)
+        sendChoices.layer.shadowOpacity = 8
+        sendChoices.layer.shadowRadius = 20
         
         // Set the image view for the buttons
         usePhotoBtn.imageView?.contentMode = .scaleAspectFit
@@ -55,7 +63,7 @@ class PreviewViewController: UIViewController {
         usePhotoBtn.imageView?.tintColor = UIColor.green
         retakeBtn.imageView?.contentMode = .scaleAspectFit
         
-        loadingView.layer.cornerRadius = 5
+        loadingView.layer.cornerRadius = viewCornerRadius
         viewProg.layer.cornerRadius = viewCornerRadius
         drawProgressLayer()
     }
@@ -103,7 +111,7 @@ extension PreviewViewController {
             print("Image converted to Data")
             
             // Create a reference to the file you want to upload
-            let imageRef = storageRef.child("images/\(getUniqueFileName()).jpg")
+            let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(getUniqueFileName()).jpg")
             
             // Upload the file 
             let uploadTask = imageRef.put(imgData, metadata: nil) { (metadata, error) in
@@ -193,6 +201,12 @@ extension PreviewViewController {
 // MARK: - Helpers
 extension PreviewViewController {
     
+    func touchedView() {
+        if choicesShown == true {
+            hideChoices()
+        }
+    }
+    
     func addBlurView() {
         blur = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blur.frame = self.view.frame
@@ -206,7 +220,7 @@ extension PreviewViewController {
     /// Prompts the user for email or phone number sending
     func showChoices() {
         choicesShown = true
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.3) {
             self.sendChoices.isHidden = false
             self.sendChoices.alpha = 1
         }
@@ -215,7 +229,7 @@ extension PreviewViewController {
     /// Hides the choices of how to send the image
     func hideChoices() {
         choicesShown = false
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.3) {
             self.sendChoices.isHidden = true
             self.sendChoices.alpha = 0
         }

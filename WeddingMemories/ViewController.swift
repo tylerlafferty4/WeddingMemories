@@ -16,6 +16,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet var imgView: UIImageView!
     @IBOutlet var photoBtn: UIButton!
     @IBOutlet var circleView: UIView!
+    @IBOutlet var backgroundView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         imgView.layer.cornerRadius = imgView.frame.width/2
         let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.showTap))
         imgView.addGestureRecognizer(tap)
+        
+        let backTap = UITapGestureRecognizer(target: self, action: #selector(ViewController.showCamera))
+        backgroundView.addGestureRecognizer(backTap)
         
     }
 

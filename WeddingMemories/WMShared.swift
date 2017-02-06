@@ -12,6 +12,8 @@ class WMShared {
     
     static var sharedInstance: WMShared! = WMShared()
     var userContact: String = ""
+    var brideGroom: String = "Tyler & Roberta"
+
 }
 
 extension String {

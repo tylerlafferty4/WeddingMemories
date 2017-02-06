@@ -18,7 +18,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     @IBOutlet var countdownLbl: UILabel!
     @IBOutlet var captureBtn: UIButton!
     @IBOutlet var photoCapture: UIImageView!
-    @IBOutlet var blurView: UIVisualEffectView!
+    @IBOutlet var captureView: UIView!
     @IBOutlet var camImg: UIImageView!
     
     // -- Vars --
@@ -32,17 +32,38 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         photoCapture.layer.cornerRadius = photoCapture.frame.width/2
-        blurView.layer.cornerRadius = blurView.frame.width/2
         let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.showTap))
         camImg.isUserInteractionEnabled = true
         camImg.addGestureRecognizer(tap)
         camImg.image = UIImage(named: "camera-solid")?.withRenderingMode(.alwaysTemplate)
         camImg.tintColor = UIColor.lightGray
-        countdownBtn.layer.cornerRadius = countdownBtn.frame.width/2
-        countdownLbl.layer.cornerRadius = countdownLbl.frame.width/2
         countdownBtn.titleLabel?.numberOfLines = 0
         countdownBtn.titleLabel?.textAlignment = .center
         countdownBtn.setTitle("Start\nTimer", for: .normal)
+        
+        // Add shadows to the buttons
+//        blurView.layer.masksToBounds = false
+        captureView.layer.cornerRadius = captureView.frame.width/2
+        captureView.layer.shadowColor = UIColor.black.cgColor
+        captureView.layer.shadowOffset = CGSize(width: 0, height: 20)
+        captureView.layer.shadowOpacity = 8
+        captureView.layer.shadowRadius = 20
+        
+        // Timer Button
+        countdownBtn.layer.masksToBounds = false
+        countdownBtn.layer.cornerRadius = countdownBtn.frame.width/2
+        countdownBtn.layer.shadowColor = UIColor.black.cgColor
+        countdownBtn.layer.shadowOffset = CGSize(width: 0, height: 20)
+        countdownBtn.layer.shadowOpacity = 8
+        countdownBtn.layer.shadowRadius = 20
+        
+        //countdownLbl.layer.masksToBounds = false
+        countdownLbl.layer.cornerRadius = countdownLbl.frame.width/2
+        countdownLbl.layer.shadowColor = UIColor.black.cgColor
+        countdownLbl.layer.shadowOffset = CGSize(width: 0, height: 20)
+        countdownLbl.layer.shadowOpacity = 8
+        countdownLbl.layer.shadowRadius = 20
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +88,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
                 if (captureSesssion.canAddOutput(cameraOutput)) {
                     captureSesssion.addOutput(cameraOutput)
                     previewLayer = AVCaptureVideoPreviewLayer(session: captureSesssion)
-                    var bounds:CGRect = self.view.layer.bounds
+                    let bounds:CGRect = self.view.layer.bounds
                     previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     previewLayer?.bounds = bounds
                     previewLayer?.position = CGPoint(x: bounds.midX, y: bounds.midY)
@@ -164,11 +185,11 @@ extension CameraViewController {
     func showTap() {
         UIView.animate(withDuration: 0.2, animations: {
             self.photoCapture.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            self.blurView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.captureView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }) { (finished) in
             UIView.animate(withDuration: 0.2, animations: {
                 self.photoCapture.transform = CGAffineTransform.identity
-                self.blurView.transform = CGAffineTransform.identity
+                self.captureView.transform = CGAffineTransform.identity
             }, completion: { (bool) in
                 self.capturePhoto()
             })
