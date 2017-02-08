@@ -105,13 +105,17 @@ extension PreviewViewController {
 
 // MARK: - Firebase Upload
 extension PreviewViewController {
+    
+    /// Uploads the image to FireBase
     func uploadPhoto() {
         // Add the image as an attachment
         if let imgData: Data = UIImagePNGRepresentation(takenPhoto) {
-            print("Image converted to Data")
             
             // Create a reference to the file you want to upload
             let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(getUniqueFileName()).jpg")
+            
+            // Show the loader to the user
+            self.unhideLoader()
             
             // Upload the file 
             let uploadTask = imageRef.put(imgData, metadata: nil) { (metadata, error) in
@@ -119,15 +123,27 @@ extension PreviewViewController {
                     // Uh-oh, an error occurred!
                     print("******An Error Occurred******")
                     
+                    // Hide the loader
+                    self.hideLoader()
+                    
                     // Display failed message
                     self.displayFailedAlert()
                     return
                 }
                 
                 // Metadata contains file metadata such as size, content-type, and download URL.
-                let downloadURL = metadata.downloadURL
-                print(downloadURL)
+//                let downloadURL = metadata.downloadURL
+                
+                // Append to images array in order to use on screen saver now
+                WMShared.sharedInstance.imageNames.append("\(self.getUniqueFileName()).jpg")
+                
+                // Save the image to the device for use on the screen saver
+                self.addImageToDocuments(img: self.takenPhoto)
+                
+                // Hide the loading view upon completion
                 self.hideLoader()
+                
+                // Image has been uploaded. Display the success alert
                 self.displaySentAlert()
             }
             
@@ -135,9 +151,6 @@ extension PreviewViewController {
             _ = uploadTask.observe(.progress) { snapshot in
                 // A progress event occured
                 print("Progress -> \(snapshot.progress)")
-                
-                // Show the loader to the user
-                self.unhideLoader()
                 
                 // Update the label with the percent complete
                 let percentComplete = 100 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
@@ -168,6 +181,7 @@ extension PreviewViewController {
         emailAlert.showAlertView(superview: self.view, title: "Please enter your email address", text: "example@gmail.com", type: .Email, img: nil, confirmAction: confirm, cancelAction: cancel)
     }
     
+    /// Call this method to ask the user for their phone number
     func promptForPhoneNumber() {
         let emailAlert = CustomAlertView()
         let confirm = CustomAlertAction(title: "Upload") {
@@ -201,18 +215,32 @@ extension PreviewViewController {
 // MARK: - Helpers
 extension PreviewViewController {
     
+    /// Add the image to the device documents
+    func addImageToDocuments(img : UIImage) {
+        let fileManager = FileManager.default
+        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(self.getUniqueFileName()).jpg")
+        let image = self.takenPhoto
+        print(paths)
+        let imageData = UIImageJPEGRepresentation(image!, 0.5)
+        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
+    }
+    
+    /// Used to display the choices popup
     func touchedView() {
         if choicesShown == true {
             hideChoices()
         }
     }
     
+    /// Add blur view for loading view
     func addBlurView() {
         blur = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blur.frame = self.view.frame
         self.view.addSubview(blur)
     }
     
+    
+    /// Hide the blur view
     func hideBlurView() {
         blur.removeFromSuperview()
     }
@@ -265,6 +293,7 @@ extension PreviewViewController {
         return fileName
     }
     
+    /// Initial draw of the progress view
     func drawProgressLayer(){
         let bezierPath = UIBezierPath(roundedRect: viewProg.bounds, cornerRadius: viewCornerRadius)
         bezierPath.close()

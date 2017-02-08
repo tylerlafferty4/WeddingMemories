@@ -84,11 +84,44 @@
                         <outlet property="circleView" destination="zn1-pC-kWb" id="vpa-kP-F9w"/>
                         <outlet property="imgView" destination="LZl-cj-ezh" id="pPL-Gl-1kH"/>
                         <outlet property="photoBtn" destination="iYQ-12-XfW" id="nN9-AS-EGh"/>
+                        <segue destination="j4Q-Dl-0ZB" kind="presentation" identifier="showScreensaver" id="6xZ-zF-H8M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="903.125" y="138.8671875"/>
+            <point key="canvasLocation" x="902.92968749999989" y="138.28125"/>
+        </scene>
+        <!--Screen Saver View Controller-->
+        <scene sceneID="bBg-gC-agg">
+            <objects>
+                <viewController id="j4Q-Dl-0ZB" customClass="ScreenSaverViewController" customModule="WeddingMemories" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wK2-Fj-xnt"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZuQ-nE-NlR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5zg-Q7-o7U">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8hD-1y-8qp">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8hD-1y-8qp" firstAttribute="top" secondItem="5zg-Q7-o7U" secondAttribute="top" id="Oxk-GQ-xRf"/>
+                            <constraint firstAttribute="trailing" secondItem="8hD-1y-8qp" secondAttribute="trailing" id="ftA-Qi-YoH"/>
+                            <constraint firstItem="ZuQ-nE-NlR" firstAttribute="top" secondItem="8hD-1y-8qp" secondAttribute="bottom" id="gWO-Cc-KxO"/>
+                            <constraint firstItem="8hD-1y-8qp" firstAttribute="leading" secondItem="5zg-Q7-o7U" secondAttribute="leading" id="l0e-wm-48S"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="screenSaver" destination="8hD-1y-8qp" id="T84-SQ-T7S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xic-nv-2SC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="903" y="913"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="X9O-lN-0OH">
@@ -292,11 +325,11 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K55-CM-BWx">
-                                <rect key="frame" x="616" y="503" width="400" height="130"/>
+                                <rect key="frame" x="666" y="503" width="350" height="130"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7XB-Ng-fbs">
-                                        <rect key="frame" x="0.0" y="0.0" width="400" height="62.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="62.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                         <state key="normal" title="Send to Email">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -305,8 +338,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9O-Ka-38V">
-                                        <rect key="frame" x="0.0" y="66.5" width="400" height="63.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                        <rect key="frame" x="0.0" y="66.5" width="350" height="63.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                         <state key="normal" title="Send to Phone">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -315,7 +348,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YZM-er-32e">
-                                        <rect key="frame" x="0.0" y="62.5" width="400" height="4"/>
+                                        <rect key="frame" x="0.0" y="62.5" width="350" height="4"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="4" id="9vx-6g-g3I"/>
@@ -336,7 +369,7 @@
                                     <constraint firstItem="YZM-er-32e" firstAttribute="centerX" secondItem="K55-CM-BWx" secondAttribute="centerX" id="Xsf-xh-ihJ"/>
                                     <constraint firstItem="YZM-er-32e" firstAttribute="leading" secondItem="K55-CM-BWx" secondAttribute="leading" id="gsE-uI-uNK"/>
                                     <constraint firstAttribute="height" constant="130" id="ltS-9f-6UH"/>
-                                    <constraint firstAttribute="width" constant="400" id="nmo-Tk-0Pl"/>
+                                    <constraint firstAttribute="width" constant="350" id="nmo-Tk-0Pl"/>
                                     <constraint firstItem="o9O-Ka-38V" firstAttribute="top" secondItem="YZM-er-32e" secondAttribute="bottom" id="pX5-wR-42i"/>
                                     <constraint firstItem="o9O-Ka-38V" firstAttribute="top" secondItem="YZM-er-32e" secondAttribute="bottom" id="yod-Fr-Zbm"/>
                                 </constraints>

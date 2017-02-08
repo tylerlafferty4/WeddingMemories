@@ -10,6 +10,7 @@
 		70C28662EE5234DA6709858E /* Pods_WeddingMemories.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A383056FA71511CC0555FCF6 /* Pods_WeddingMemories.framework */; };
 		D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C5E1E3921E700271B4F /* CustomAlertView.swift */; };
 		D8002C611E39281E00271B4F /* WMShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8002C601E39281E00271B4F /* WMShared.swift */; };
+		D80155FC1E4A576100BEC07C /* ScreenSaverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80155FB1E4A576100BEC07C /* ScreenSaverViewController.swift */; };
 		D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8120CC21E37CD0D003223CC /* AppDelegate.swift */; };
 		D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8120CC41E37CD0D003223CC /* ViewController.swift */; };
 		D8120CC81E37CD0D003223CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC61E37CD0D003223CC /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 		A383056FA71511CC0555FCF6 /* Pods_WeddingMemories.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeddingMemories.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8002C5E1E3921E700271B4F /* CustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		D8002C601E39281E00271B4F /* WMShared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMShared.swift; sourceTree = "<group>"; };
+		D80155FB1E4A576100BEC07C /* ScreenSaverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSaverViewController.swift; sourceTree = "<group>"; };
 		D8120CBF1E37CD0D003223CC /* WeddingMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8120CC21E37CD0D003223CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8120CC41E37CD0D003223CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				D8002C601E39281E00271B4F /* WMShared.swift */,
 				D85B34341E413347004F7CD9 /* CameraViewController.swift */,
 				D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */,
+				D80155FB1E4A576100BEC07C /* ScreenSaverViewController.swift */,
 			);
 			path = WeddingMemories;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				D8002C611E39281E00271B4F /* WMShared.swift in Sources */,
 				D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */,
 				D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */,
+				D80155FC1E4A576100BEC07C /* ScreenSaverViewController.swift in Sources */,
 				D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */,
 				D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */,
 				D85B34371E4376BC004F7CD9 /* PreviewViewController.swift in Sources */,

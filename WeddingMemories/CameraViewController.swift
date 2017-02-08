@@ -32,6 +32,8 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         photoCapture.layer.cornerRadius = photoCapture.frame.width/2
+        
+        // Tap Gesture to take a picture
         let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.showTap))
         camImg.isUserInteractionEnabled = true
         camImg.addGestureRecognizer(tap)
@@ -42,7 +44,6 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         countdownBtn.setTitle("Start\nTimer", for: .normal)
         
         // Add shadows to the buttons
-//        blurView.layer.masksToBounds = false
         captureView.layer.cornerRadius = captureView.frame.width/2
         captureView.layer.shadowColor = UIColor.black.cgColor
         captureView.layer.shadowOffset = CGSize(width: 0, height: 20)
@@ -57,7 +58,7 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         countdownBtn.layer.shadowOpacity = 8
         countdownBtn.layer.shadowRadius = 20
         
-        //countdownLbl.layer.masksToBounds = false
+        // Timer Label
         countdownLbl.layer.cornerRadius = countdownLbl.frame.width/2
         countdownLbl.layer.shadowColor = UIColor.black.cgColor
         countdownLbl.layer.shadowOffset = CGSize(width: 0, height: 20)
