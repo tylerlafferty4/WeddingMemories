@@ -294,9 +294,9 @@ extension CustomAlertView : UITextFieldDelegate {
                     dismissButton.isUserInteractionEnabled = true
                 }
             } else if alertType == AlertType.PhoneNumber {
-                if checkPhoneNumber(text: textField.text!) > 10 {
+                if txt.characters.count > 10 {
                     textField.deleteBackward()
-                } else if checkPhoneNumber(text: textField.text!) == 10 {
+                } else if txt.characters.count == 10 {
                     WMShared.sharedInstance.userContact = txt
                     dismissButton.isUserInteractionEnabled = true
                 } else {
@@ -306,11 +306,20 @@ extension CustomAlertView : UITextFieldDelegate {
         }
     }
     
-    func checkPhoneNumber(text: String) -> Int {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if alertType == AlertType.PhoneNumber {
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            return allowedCharacters.isSuperset(of: characterSet)
+        }
+        return true
+    }
+    
+    func checkPhoneNumber(text: String) -> String {
         let phone = text.replacingOccurrences(of: "-", with: "")
         let number = phone.replacingOccurrences(of: "(", with: "")
         let phoneNumber = number.replacingOccurrences(of: ")", with: "")
-        return phoneNumber.characters.count
+        return phoneNumber
     }
     
     func checkPhoneLength(text: String?) -> Bool {

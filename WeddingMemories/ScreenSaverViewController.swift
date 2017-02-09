@@ -27,6 +27,7 @@ class ScreenSaverViewController: UIViewController {
     
     /// Dismiss the screen saver
     func dismissScreenSaver() {
+        screenSaver.layer.removeAllAnimations()
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -78,12 +79,22 @@ class ScreenSaverViewController: UIViewController {
     /// Pulls back a UIImage for the path
     func findImage(name: String) -> UIImage {
         let fileManager = FileManager.default
-        let imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent("\(name).jpg")
-        if fileManager.fileExists(atPath: imagePAth){
-            return UIImage(contentsOfFile: imagePAth)!
-        }else{
-            print("No Image")
-            return UIImage()
+        let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent("\(name).jpg")
+        if fileManager.fileExists(atPath: imagePath){
+            return UIImage(contentsOfFile: imagePath)!
+        } else {
+            let secondPath = "\(imagePath).jpg"
+            if fileManager.fileExists(atPath: secondPath) {
+               return UIImage(contentsOfFile: imagePath)!
+            } else {
+                let thirdPath = (self.getDirectoryPath() as NSString).appendingPathComponent(name)
+                if fileManager.fileExists(atPath: thirdPath) {
+                    return UIImage(contentsOfFile: imagePath)!
+                } else {
+                    print("No Image")
+                    return UIImage()
+                }
+            }
         }
     }
     

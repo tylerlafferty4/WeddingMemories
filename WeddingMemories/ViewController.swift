@@ -79,9 +79,28 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
             
             // if you want to filter the directory contents you can do like this:
             let mp3Files = directoryContents.filter{ $0.pathExtension == "jpg" }
+            
+            // -- Reset the directory --
+            // ******* BE CAREFUL *********s
+            // let files = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
+            // for file in files {
+            //    deleteDirectory(name: file)
+            // }
+            // ****************************
+            
             WMShared.sharedInstance.imageNames = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
         } catch let error as NSError {
             print(error.localizedDescription)
+        }
+    }
+    
+    func deleteDirectory(name: String){
+        let fileManager = FileManager.default
+        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("name")
+        if fileManager.fileExists(atPath: paths as String){
+            try! fileManager.removeItem(atPath: paths as String)
+        }else{
+            print("Something wronge.")
         }
     }
 }

@@ -111,8 +111,11 @@ extension PreviewViewController {
         // Add the image as an attachment
         if let imgData: Data = UIImagePNGRepresentation(takenPhoto) {
             
+            // Create an image name to use
+            let imageName = "\(getUniqueFileName())"
+            
             // Create a reference to the file you want to upload
-            let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(getUniqueFileName()).jpg")
+            let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(imageName)")
             
             // Show the loader to the user
             self.unhideLoader()
@@ -135,10 +138,10 @@ extension PreviewViewController {
 //                let downloadURL = metadata.downloadURL
                 
                 // Append to images array in order to use on screen saver now
-                WMShared.sharedInstance.imageNames.append("\(self.getUniqueFileName()).jpg")
+                WMShared.sharedInstance.imageNames.append(imageName)
                 
                 // Save the image to the device for use on the screen saver
-                self.addImageToDocuments(img: self.takenPhoto)
+                self.addImageToDocuments(img: self.takenPhoto, name: imageName)
                 
                 // Hide the loading view upon completion
                 self.hideLoader()
@@ -216,11 +219,10 @@ extension PreviewViewController {
 extension PreviewViewController {
     
     /// Add the image to the device documents
-    func addImageToDocuments(img : UIImage) {
+    func addImageToDocuments(img : UIImage, name : String) {
         let fileManager = FileManager.default
-        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(self.getUniqueFileName()).jpg")
+        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(name).jpg")
         let image = self.takenPhoto
-        print(paths)
         let imageData = UIImageJPEGRepresentation(image!, 0.5)
         fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
     }
