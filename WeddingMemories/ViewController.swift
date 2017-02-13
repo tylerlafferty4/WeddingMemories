@@ -70,6 +70,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     
     /// Get a list of all the image names that are stored in the Documents
     func getImageNames(){
+        
         // Get the document directory url
         let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         
@@ -94,13 +95,15 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
+    /// Do not call this unless you want to delete the file from the directory
+    /// *** Warning!!!!!!!!
     func deleteDirectory(name: String){
         let fileManager = FileManager.default
         let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("name")
         if fileManager.fileExists(atPath: paths as String){
             try! fileManager.removeItem(atPath: paths as String)
-        }else{
-            print("Something wronge.")
+        } else{
+            print("Did not find file to delete -> \(name)")
         }
     }
 }
@@ -129,6 +132,7 @@ extension ViewController {
         if timer != nil {
             timer.invalidate()
         }
+        // Present the camera to the user
         performSegue(withIdentifier: "showCamera", sender: self)
     }
     

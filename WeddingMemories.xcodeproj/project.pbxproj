@@ -16,6 +16,9 @@
 		D8120CC81E37CD0D003223CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC61E37CD0D003223CC /* Main.storyboard */; };
 		D8120CCA1E37CD0D003223CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8120CC91E37CD0D003223CC /* Assets.xcassets */; };
 		D8120CCD1E37CD0D003223CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8120CCB1E37CD0D003223CC /* LaunchScreen.storyboard */; };
+		D81347D41E4E797000869ABA /* MustacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81347D31E4E797000869ABA /* MustacheHandler.swift */; };
+		D81347D61E4E7BA200869ABA /* HatHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81347D51E4E7BA200869ABA /* HatHandler.swift */; };
+		D81347D81E4F85DB00869ABA /* GlassesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81347D71E4F85DB00869ABA /* GlassesHandler.swift */; };
 		D8211E8D1E40CBD60007C422 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */; };
 		D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B34341E413347004F7CD9 /* CameraViewController.swift */; };
 		D85B34371E4376BC004F7CD9 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */; };
@@ -35,6 +38,9 @@
 		D8120CC91E37CD0D003223CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8120CCC1E37CD0D003223CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8120CCE1E37CD0D003223CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D81347D31E4E797000869ABA /* MustacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MustacheHandler.swift; sourceTree = "<group>"; };
+		D81347D51E4E7BA200869ABA /* HatHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HatHandler.swift; sourceTree = "<group>"; };
+		D81347D71E4F85DB00869ABA /* GlassesHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlassesHandler.swift; sourceTree = "<group>"; };
 		D8211E8C1E40CBD60007C422 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D85B34341E413347004F7CD9 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +100,9 @@
 				D85B34341E413347004F7CD9 /* CameraViewController.swift */,
 				D85B34361E4376BC004F7CD9 /* PreviewViewController.swift */,
 				D80155FB1E4A576100BEC07C /* ScreenSaverViewController.swift */,
+				D81347D31E4E797000869ABA /* MustacheHandler.swift */,
+				D81347D51E4E7BA200869ABA /* HatHandler.swift */,
+				D81347D71E4F85DB00869ABA /* GlassesHandler.swift */,
 			);
 			path = WeddingMemories;
 			sourceTree = "<group>";
@@ -234,8 +243,11 @@
 				D8002C611E39281E00271B4F /* WMShared.swift in Sources */,
 				D85B34351E413347004F7CD9 /* CameraViewController.swift in Sources */,
 				D8002C5F1E3921E700271B4F /* CustomAlertView.swift in Sources */,
+				D81347D41E4E797000869ABA /* MustacheHandler.swift in Sources */,
 				D80155FC1E4A576100BEC07C /* ScreenSaverViewController.swift in Sources */,
+				D81347D81E4F85DB00869ABA /* GlassesHandler.swift in Sources */,
 				D8120CC51E37CD0D003223CC /* ViewController.swift in Sources */,
+				D81347D61E4E7BA200869ABA /* HatHandler.swift in Sources */,
 				D8120CC31E37CD0D003223CC /* AppDelegate.swift in Sources */,
 				D85B34371E4376BC004F7CD9 /* PreviewViewController.swift in Sources */,
 			);

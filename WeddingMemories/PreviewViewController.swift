@@ -21,11 +21,11 @@ class PreviewViewController: UIViewController {
     @IBOutlet var sendChoices: UIView!
     @IBOutlet var viewProg: UIView! // your parent view, Just a blank view
     
+    // -- Vars -- 
     var choicesShown: Bool = false
-    
-    let viewCornerRadius : CGFloat = 5
+    var viewCornerRadius : CGFloat = 5
     var borderLayer : CAShapeLayer = CAShapeLayer()
-    let progressLayer : CAShapeLayer = CAShapeLayer()
+    var progressLayer : CAShapeLayer = CAShapeLayer()
     
     // -- Blur View --
     var blur: UIVisualEffectView!
@@ -65,7 +65,12 @@ class PreviewViewController: UIViewController {
         
         loadingView.layer.cornerRadius = viewCornerRadius
         viewProg.layer.cornerRadius = viewCornerRadius
+        
+        // Initial draw of the progress view
         drawProgressLayer()
+        
+        // Detect faces
+        detect()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +86,7 @@ class PreviewViewController: UIViewController {
 // MARK: - Button Actions
 extension PreviewViewController {
     @IBAction func usePhoto(_ sender: Any) {
+        // If the choices are already shown, dismiss. Else display the choices
         if choicesShown == false {
             showChoices()
         } else {
@@ -89,16 +95,23 @@ extension PreviewViewController {
     }
     
     @IBAction func retakePhoto(_ sender: Any) {
+        // Pop back to the camera view
         self.navigationController?.popViewController(animated: true)
     }
     
+    /// Chose email destination
     @IBAction func sendToEmail(_ sender: Any) {
+        // Hide the choices prompt
         hideChoices()
+        // Ask the user for their email
         promptForEmail()
     }
     
+    /// Chose phone destination
     @IBAction func sendToPhone(_ sender: Any) {
+        // Hide the choices prompt
         hideChoices()
+        // Ask the user for their phone number
         promptForPhoneNumber()
     }
 }
@@ -176,6 +189,7 @@ extension PreviewViewController {
     func promptForEmail() {
         let emailAlert = CustomAlertView()
         let confirm = CustomAlertAction(title: "Upload") {
+            // Email has been entered, begin upload of file
             self.uploadPhoto()
         }
         let cancel = CustomAlertAction(title: "Cancel") { 
@@ -188,6 +202,7 @@ extension PreviewViewController {
     func promptForPhoneNumber() {
         let emailAlert = CustomAlertView()
         let confirm = CustomAlertAction(title: "Upload") {
+            // Phone Number has been entered, begin upload of file
             self.uploadPhoto()
         }
         let cancel = CustomAlertAction(title: "Cancel") {
@@ -323,6 +338,74 @@ extension PreviewViewController {
     }
 }
 
+
+// MARK: - Facial Recognition
+extension PreviewViewController {
+    func detect() {
+        let ciImage  = CIImage(cgImage: previewImgView.image!.cgImage!)
+        let ciDetector = CIDetector(ofType:CIDetectorTypeFace
+            ,context:CIContext()
+            ,options:[
+                CIDetectorAccuracy:CIDetectorAccuracyHigh,
+                CIDetectorSmile:true
+            ]
+        )
+
+        let features = ciDetector?.features(in: ciImage, options: [CIDetectorImageOrientation:1])
+        
+        UIGraphicsBeginImageContext(previewImgView.image!.size)
+        previewImgView.image!.draw(in: CGRect(x: 0, y: 0, width: previewImgView.image!.size.width, height: previewImgView.image!.size.height))
+        
+        for feature in features! {
+            
+            //context
+            let drawCtxt = UIGraphicsGetCurrentContext()
+            
+            // Face
+            let face = feature as! CIFaceFeature
+            
+//            //face
+//            var faceRect = face.bounds
+//            faceRect.origin.y = previewImgView.image!.size.height - faceRect.origin.y - faceRect.size.height
+//            drawCtxt!.setStrokeColor(UIColor.red.cgColor)
+//            drawCtxt!.stroke(faceRect)
+//            
+//            //mouth
+//            if face.hasMouthPosition != false{
+//                let mouseRectY = previewImgView.image!.size.height - face.mouthPosition.y
+//                let mouseRect  = CGRect(x: face.mouthPosition.x - 5, y: mouseRectY - 5, width: 10, height: 10)
+//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//                drawCtxt!.stroke(mouseRect)
+//            }
+//            
+            MustacheHandler.drawFrenchMustache(imgView: previewImgView, face: face, context: drawCtxt!)
+            
+            HatHandler.drawTopHat(imgView: previewImgView, face: face, context: drawCtxt!)
+            
+//            GlassesHandler.drawSunglasses(imgView: previewImgView, face: face, context: drawCtxt!)
+            
+//            //leftEye
+//            if(feature as! CIFaceFeature).hasLeftEyePosition != false{
+//                let leftEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).leftEyePosition.y
+//                let leftEyeRect  = CGRect(x:(feature as! CIFaceFeature).leftEyePosition.x - 5,y:leftEyeRectY - 5,width:10,height:10)
+//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//                drawCtxt!.stroke(leftEyeRect)
+//            }
+//            
+//            //rightEye
+//            if (feature as! CIFaceFeature).hasRightEyePosition != false{
+//                let rightEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).rightEyePosition.y
+//                let rightEyeRect  = CGRect(x:(feature as! CIFaceFeature).rightEyePosition.x - 5,y:rightEyeRectY - 5,width:10,height:10)
+//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//                drawCtxt!.stroke(rightEyeRect)
+//            }
+        }
+        let drawnImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        previewImgView.image = drawnImage
+        self.takenPhoto = drawnImage
+    }
+}
 
 
 

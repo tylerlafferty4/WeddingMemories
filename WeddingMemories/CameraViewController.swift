@@ -31,7 +31,6 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        photoCapture.layer.cornerRadius = photoCapture.frame.width/2
         
         // Tap Gesture to take a picture
         let tap = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.showTap))
@@ -42,6 +41,8 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         countdownBtn.titleLabel?.numberOfLines = 0
         countdownBtn.titleLabel?.textAlignment = .center
         countdownBtn.setTitle("Start\nTimer", for: .normal)
+        
+        photoCapture.layer.cornerRadius = photoCapture.frame.width/2
         
         // Add shadows to the buttons
         captureView.layer.cornerRadius = captureView.frame.width/2
@@ -98,14 +99,16 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
                     captureSesssion.startRunning()
                 }
             } else {
-                print("issue here : captureSesssion.canAddInput")
+                print("This device does not have input")
             }
         } else {
-            print("some problem here")
+            print("This device does not have a camera")
         }
     }
     
+    /// Top Button to dismiss the camera
     @IBAction func closeCamera(_ sender: UIButton) {
+        // Make sure to turn the timer off
         if timer != nil {
             timer.invalidate()
         }
@@ -121,23 +124,28 @@ extension CameraViewController {
         countdownBtn.isHidden = true
         countdownLbl.isHidden = false
         if let time = timer {
+            // If the timer is running, don't start another one
             if time.isValid == false {
                 beginTimer()
             }
         } else {
+            // There is no timer going, start a new one
             beginTimer()
         }
     }
     
     /// Starts a timer
     func beginTimer() {
+        // Every second, change the label text to simulate a countdown
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(CameraViewController.countdownText), userInfo: nil, repeats: true)
     }
     
     /// Updates the countdown label
     func countdownText() {
         secondsRemaining -= 1
+        // Update the label to show how many seconds are remaining
         countdownLbl.text = "\(secondsRemaining)"
+        // If the countdown is finished, stop the timer and take a photo
         if secondsRemaining == 0 {
             timer.invalidate()
             capturePhoto()
@@ -176,13 +184,14 @@ extension CameraViewController {
             capturedImage = image
             performSegue(withIdentifier: "showPreview", sender: self)
         } else {
-            print("some error here")
+            print("Error Occurred trying to take a photo")
         }
     }
 }
 
 // MARK: - Helpers
 extension CameraViewController {
+    /// Shrinks and expands the view to show affordability
     func showTap() {
         UIView.animate(withDuration: 0.2, animations: {
             self.photoCapture.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -192,7 +201,10 @@ extension CameraViewController {
                 self.photoCapture.transform = CGAffineTransform.identity
                 self.captureView.transform = CGAffineTransform.identity
             }, completion: { (bool) in
-                self.capturePhoto()
+                // The animation is complete, take a photo
+//                self.capturePhoto()
+                self.capturedImage = UIImage(named: "Snapchat-1848010358")
+                self.performSegue(withIdentifier: "showPreview", sender: self)
             })
             
         }
@@ -203,6 +215,14 @@ extension CameraViewController {
 extension CameraViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! PreviewViewController
+        // Set the image so the user can Preview the image on the next page
         vc.takenPhoto = capturedImage
     }
 }
+
+
+
+
+
+
+
