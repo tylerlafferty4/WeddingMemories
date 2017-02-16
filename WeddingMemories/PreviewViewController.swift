@@ -378,7 +378,9 @@ extension PreviewViewController {
 //                drawCtxt!.stroke(mouseRect)
 //            }
 //            
-            MustacheHandler.drawFrenchMustache(imgView: previewImgView, face: face, context: drawCtxt!)
+//            MustacheHandler.drawFrenchMustache(imgView: previewImgView, face: face, context: drawCtxt!)
+            
+            MustacheHandler.drawFullBeard(imgView: previewImgView, face: face, context: drawCtxt!)
             
             HatHandler.drawTopHat(imgView: previewImgView, face: face, context: drawCtxt!)
             
