@@ -2,8 +2,8 @@
 //  ScreenSaverViewController.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 2/7/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
 import Foundation
@@ -26,7 +26,7 @@ class ScreenSaverViewController: UIViewController {
     }
     
     /// Dismiss the screen saver
-    func dismissScreenSaver() {
+    @objc func dismissScreenSaver() {
         screenSaver.layer.removeAllAnimations()
         self.dismiss(animated: true, completion: nil)
     }
@@ -61,7 +61,7 @@ class ScreenSaverViewController: UIViewController {
         
         // Once the animation completes, wait 5 seconds and then run this function again
         CATransaction.setCompletionBlock {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + SCREEN_SAVER_SLIDE_TIME) {
                 // Increment our index to get the next image
                 WMShared.sharedInstance.screenSaverIndex += 1
                 self.displayScreenSaver()
@@ -70,7 +70,7 @@ class ScreenSaverViewController: UIViewController {
         
         // Add the animation to the image view
         let transition = CATransition()
-        transition.type = kCATransitionFade
+        transition.type = CATransitionType.fade
         screenSaver.layer.add(transition, forKey: kCATransition)
         screenSaver.image = toImage
         CATransaction.commit()
@@ -85,7 +85,7 @@ class ScreenSaverViewController: UIViewController {
         } else {
             let secondPath = "\(imagePath).jpg"
             if fileManager.fileExists(atPath: secondPath) {
-               return UIImage(contentsOfFile: imagePath)!
+                return UIImage(contentsOfFile: imagePath)!
             } else {
                 let thirdPath = (self.getDirectoryPath() as NSString).appendingPathComponent(name)
                 if fileManager.fileExists(atPath: thirdPath) {

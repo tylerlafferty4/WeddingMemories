@@ -2,12 +2,13 @@
 //  PreviewViewController.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 2/2/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
 import Foundation
 import Firebase
+import MessageUI
 
 class PreviewViewController: UIViewController {
     
@@ -21,7 +22,7 @@ class PreviewViewController: UIViewController {
     @IBOutlet var sendChoices: UIView!
     @IBOutlet var viewProg: UIView! // your parent view, Just a blank view
     
-    // -- Vars -- 
+    // -- Vars --
     var choicesShown: Bool = false
     var viewCornerRadius : CGFloat = 5
     var borderLayer : CAShapeLayer = CAShapeLayer()
@@ -34,14 +35,14 @@ class PreviewViewController: UIViewController {
     var takenPhoto: UIImage!
     
     // -- Firebase Storage --
-    var storage = FIRStorage.storage()
-    var storageRef = FIRStorageReference()
+    var storage = Storage.storage()
+    var storageRef: StorageReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // FireBase storage init
-        storageRef = storage.reference(forURL: "gs://wedding-memories.appspot.com")
+        storageRef = storage.reference()
         
         // Set the preview to image that was taken
         previewImgView.image = takenPhoto
@@ -122,7 +123,7 @@ extension PreviewViewController {
     /// Uploads the image to FireBase
     func uploadPhoto() {
         // Add the image as an attachment
-        if let imgData: Data = UIImagePNGRepresentation(takenPhoto) {
+        if let imgData: Data = takenPhoto.pngData() {
             
             // Create an image name to use
             let imageName = "\(getUniqueFileName())"
@@ -133,9 +134,9 @@ extension PreviewViewController {
             // Show the loader to the user
             self.unhideLoader()
             
-            // Upload the file 
-            let uploadTask = imageRef.put(imgData, metadata: nil) { (metadata, error) in
-                guard let metadata = metadata else {
+            // Upload the file
+            let uploadTask = imageRef.putData(imgData, metadata: nil) { (metadata, error) in
+                guard metadata != nil else {
                     // Uh-oh, an error occurred!
                     print("******An Error Occurred******")
                     
@@ -148,7 +149,7 @@ extension PreviewViewController {
                 }
                 
                 // Metadata contains file metadata such as size, content-type, and download URL.
-//                let downloadURL = metadata.downloadURL
+                //                let downloadURL = metadata.downloadURL
                 
                 // Append to images array in order to use on screen saver now
                 WMShared.sharedInstance.imageNames.append(imageName)
@@ -166,7 +167,7 @@ extension PreviewViewController {
             // Track the progress of the upload
             _ = uploadTask.observe(.progress) { snapshot in
                 // A progress event occured
-                print("Progress -> \(snapshot.progress)")
+                print("Progress -> \(String(describing: snapshot.progress))")
                 
                 // Update the label with the percent complete
                 let percentComplete = 100 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
@@ -178,11 +179,20 @@ extension PreviewViewController {
                 let prog = progress * Double(self.viewProg.bounds.width - 10)
                 self.rectProgress(incremented: CGFloat(prog))
             }
+        } else {
+            // Uh-oh, an error occurred!
+            print("******An Error Occurred******")
+            
+            // Hide the loader
+            self.hideLoader()
+            
+            // Display failed message
+            self.displayFailedAlert()
         }
     }
 }
 
-// MARK: - Custom Alets 
+// MARK: - Custom Alets
 extension PreviewViewController {
     
     /// Call this method to ask the user for their email address
@@ -190,9 +200,10 @@ extension PreviewViewController {
         let emailAlert = CustomAlertView()
         let confirm = CustomAlertAction(title: "Upload") {
             // Email has been entered, begin upload of file
+            self.sendEmail(toEmail: WMShared.sharedInstance.userContact, withImg: self.takenPhoto.pngData()!)
             self.uploadPhoto()
         }
-        let cancel = CustomAlertAction(title: "Cancel") { 
+        let cancel = CustomAlertAction(title: "Cancel") {
             
         }
         emailAlert.showAlertView(superview: self.view, title: "Please enter your email address", text: "example@gmail.com", type: .Email, img: nil, confirmAction: confirm, cancelAction: cancel)
@@ -214,7 +225,7 @@ extension PreviewViewController {
     /// Call this method after the photo has been uploaded
     func displaySentAlert() {
         let sentAlert = CustomAlertView()
-        let confirm = CustomAlertAction(title: "OK") { 
+        let confirm = CustomAlertAction(title: "OK") {
             self.dismiss(animated: true, completion: nil)
         }
         sentAlert.showAlertView(superview: self.view, title: "Wedding Memories", text: "Thank you for using Wedding Memories. Your photo will be sent shortly", type: .Text, img: "checkmark", confirmAction: confirm)
@@ -223,10 +234,32 @@ extension PreviewViewController {
     /// Call this method an error occurs while uploading the photo
     func displayFailedAlert() {
         let failAlert = CustomAlertView()
-        let confirm = CustomAlertAction(title: "Try Again") { 
+        let confirm = CustomAlertAction(title: "Try Again") {
             self.uploadPhoto()
         }
         failAlert.showAlertView(superview: self.view, title: "Wedding Memories", text: "Sorry, something went wrong. Please try again", type: .Text, img: "X", confirmAction: confirm)
+    }
+}
+
+// MARK: - MFMailComposer
+extension PreviewViewController: MFMailComposeViewControllerDelegate {
+    func sendEmail(toEmail email : String, withImg img : Data) {
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mailComposeViewController = MFMailComposeViewController()
+            mailComposeViewController.mailComposeDelegate = self
+            mailComposeViewController.setToRecipients([email])
+            mailComposeViewController.setSubject("Wedding Memories Photo")
+            mailComposeViewController.setMessageBody("Thank you for using Wedding Memories to help \(WMShared.sharedInstance.brideGroom) remember their special day.", isHTML: false)
+            mailComposeViewController.addAttachmentData(img, mimeType: "image/png", fileName: "Image.png")
+            present(mailComposeViewController, animated: true, completion: nil)
+        } else {
+            print("Unable to send mail")
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -238,12 +271,12 @@ extension PreviewViewController {
         let fileManager = FileManager.default
         let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(name).jpg")
         let image = self.takenPhoto
-        let imageData = UIImageJPEGRepresentation(image!, 0.5)
+        let imageData = image?.jpegData(compressionQuality: 0.5)
         fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
     }
     
     /// Used to display the choices popup
-    func touchedView() {
+    @objc func touchedView() {
         if choicesShown == true {
             hideChoices()
         }
@@ -283,7 +316,7 @@ extension PreviewViewController {
     /// Unhides the progress view
     func unhideLoader() {
         addBlurView()
-        self.view.bringSubview(toFront: loadingView)
+        self.view.bringSubviewToFront(loadingView)
         activityInd.startAnimating()
         retakeBtn.isUserInteractionEnabled = false
         usePhotoBtn.isUserInteractionEnabled = false
@@ -306,7 +339,7 @@ extension PreviewViewController {
     /// Returns a unique file name for saving to Firebase
     func getUniqueFileName() -> String {
         let uuid = UUID().uuidString
-        let fileName = "\(WMShared.sharedInstance.userContact)-\(uuid)"
+        let fileName = "\(uuid).png"
         return fileName
     }
     
@@ -318,7 +351,7 @@ extension PreviewViewController {
         borderLayer.fillColor = UIColor.black.cgColor
         borderLayer.strokeEnd = 0
         viewProg.layer.addSublayer(borderLayer)
-        viewProg.bringSubview(toFront: loadPercent)
+        viewProg.bringSubviewToFront(loadPercent)
     }
     
     //Make sure the value that you want in the function `rectProgress` that is going to define
@@ -342,70 +375,70 @@ extension PreviewViewController {
 // MARK: - Facial Recognition
 extension PreviewViewController {
     func detect() {
-        let ciImage  = CIImage(cgImage: previewImgView.image!.cgImage!)
-        let ciDetector = CIDetector(ofType:CIDetectorTypeFace
-            ,context:CIContext()
-            ,options:[
-                CIDetectorAccuracy:CIDetectorAccuracyHigh,
-                CIDetectorSmile:true
-            ]
-        )
-
-        let features = ciDetector?.features(in: ciImage, options: [CIDetectorImageOrientation:1])
-        
-        UIGraphicsBeginImageContext(previewImgView.image!.size)
-        previewImgView.image!.draw(in: CGRect(x: 0, y: 0, width: previewImgView.image!.size.width, height: previewImgView.image!.size.height))
-        
-        for feature in features! {
-            
-            //context
-            let drawCtxt = UIGraphicsGetCurrentContext()
-            
-            // Face
-            let face = feature as! CIFaceFeature
-            
-//            //face
-//            var faceRect = face.bounds
-//            faceRect.origin.y = previewImgView.image!.size.height - faceRect.origin.y - faceRect.size.height
-//            drawCtxt!.setStrokeColor(UIColor.red.cgColor)
-//            drawCtxt!.stroke(faceRect)
-//            
-//            //mouth
-//            if face.hasMouthPosition != false{
-//                let mouseRectY = previewImgView.image!.size.height - face.mouthPosition.y
-//                let mouseRect  = CGRect(x: face.mouthPosition.x - 5, y: mouseRectY - 5, width: 10, height: 10)
-//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
-//                drawCtxt!.stroke(mouseRect)
-//            }
-//            
-//            MustacheHandler.drawFrenchMustache(imgView: previewImgView, face: face, context: drawCtxt!)
-            
-            MustacheHandler.drawFullBeard(imgView: previewImgView, face: face, context: drawCtxt!)
-            
-            HatHandler.drawTopHat(imgView: previewImgView, face: face, context: drawCtxt!)
-            
-//            GlassesHandler.drawSunglasses(imgView: previewImgView, face: face, context: drawCtxt!)
-            
-//            //leftEye
-//            if(feature as! CIFaceFeature).hasLeftEyePosition != false{
-//                let leftEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).leftEyePosition.y
-//                let leftEyeRect  = CGRect(x:(feature as! CIFaceFeature).leftEyePosition.x - 5,y:leftEyeRectY - 5,width:10,height:10)
-//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
-//                drawCtxt!.stroke(leftEyeRect)
-//            }
-//            
-//            //rightEye
-//            if (feature as! CIFaceFeature).hasRightEyePosition != false{
-//                let rightEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).rightEyePosition.y
-//                let rightEyeRect  = CGRect(x:(feature as! CIFaceFeature).rightEyePosition.x - 5,y:rightEyeRectY - 5,width:10,height:10)
-//                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
-//                drawCtxt!.stroke(rightEyeRect)
-//            }
-        }
-        let drawnImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        previewImgView.image = drawnImage
-        self.takenPhoto = drawnImage
+//        let ciImage  = CIImage(cgImage: previewImgView.image!.cgImage!)
+//        let ciDetector = CIDetector(ofType:CIDetectorTypeFace
+//            ,context:CIContext()
+//            ,options:[
+//                CIDetectorAccuracy:CIDetectorAccuracyHigh,
+//                CIDetectorSmile:true
+//            ]
+//        )
+//
+//        let features = ciDetector?.features(in: ciImage, options: [CIDetectorImageOrientation:1])
+//
+//        UIGraphicsBeginImageContext(previewImgView.image!.size)
+//        previewImgView.image!.draw(in: CGRect(x: 0, y: 0, width: previewImgView.image!.size.width, height: previewImgView.image!.size.height))
+//
+//        for feature in features! {
+//
+//            //context
+//            let drawCtxt = UIGraphicsGetCurrentContext()
+//
+//            // Face
+//            let face = feature as! CIFaceFeature
+//
+//            //            //face
+//            //            var faceRect = face.bounds
+//            //            faceRect.origin.y = previewImgView.image!.size.height - faceRect.origin.y - faceRect.size.height
+//            //            drawCtxt!.setStrokeColor(UIColor.red.cgColor)
+//            //            drawCtxt!.stroke(faceRect)
+//            //
+//            //            //mouth
+//            //            if face.hasMouthPosition != false{
+//            //                let mouseRectY = previewImgView.image!.size.height - face.mouthPosition.y
+//            //                let mouseRect  = CGRect(x: face.mouthPosition.x - 5, y: mouseRectY - 5, width: 10, height: 10)
+//            //                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//            //                drawCtxt!.stroke(mouseRect)
+//            //            }
+//            //
+//            //            MustacheHandler.drawFrenchMustache(imgView: previewImgView, face: face, context: drawCtxt!)
+//
+//            MustacheHandler.drawFullBeard(imgView: previewImgView, face: face, context: drawCtxt!)
+//
+//            HatHandler.drawTopHat(imgView: previewImgView, face: face, context: drawCtxt!)
+//
+//            //            GlassesHandler.drawSunglasses(imgView: previewImgView, face: face, context: drawCtxt!)
+//
+//            //            //leftEye
+//            //            if(feature as! CIFaceFeature).hasLeftEyePosition != false{
+//            //                let leftEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).leftEyePosition.y
+//            //                let leftEyeRect  = CGRect(x:(feature as! CIFaceFeature).leftEyePosition.x - 5,y:leftEyeRectY - 5,width:10,height:10)
+//            //                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//            //                drawCtxt!.stroke(leftEyeRect)
+//            //            }
+//            //
+//            //            //rightEye
+//            //            if (feature as! CIFaceFeature).hasRightEyePosition != false{
+//            //                let rightEyeRectY = previewImgView.image!.size.height - (feature as! CIFaceFeature).rightEyePosition.y
+//            //                let rightEyeRect  = CGRect(x:(feature as! CIFaceFeature).rightEyePosition.x - 5,y:rightEyeRectY - 5,width:10,height:10)
+//            //                drawCtxt!.setStrokeColor(UIColor.blue.cgColor)
+//            //                drawCtxt!.stroke(rightEyeRect)
+//            //            }
+//        }
+//        let drawnImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        previewImgView.image = drawnImage
+//        self.takenPhoto = drawnImage
     }
 }
 

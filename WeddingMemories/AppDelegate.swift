@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 1/24/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
 import UIKit
@@ -14,14 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    override init() {
-        super.init()
-        FIRApp.configure()
-    }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        FirebaseApp.configure()
         return true
     }
 

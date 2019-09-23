@@ -2,8 +2,8 @@
 //  CustomAlertView.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 1/25/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
 import Foundation
@@ -43,21 +43,21 @@ class CustomAlertView : UIView {
     var buttonWidth: CGFloat!
     
     func showAlertView(superview: UIView, title: String, text: String, type: AlertType, img: String?=nil, confirmAction: CustomAlertAction?=nil, cancelAction: CustomAlertAction?=nil) {
-
+        
         alertType = type
         
         // The two actions that get passed in
         confirm = confirmAction
         cancel = cancelAction
         contentWidth = alertWidth - (padding*2)
-
+        
         blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-
+        
         blurView.frame = CGRect(x: 0, y: 0, width: superview.frame.width, height: superview.frame.height)
         self.addSubview(blurView)
         self.backgroundColor = UIColor.clear
         superview.addSubview(self)
-        superview.bringSubview(toFront: self)
+        superview.bringSubviewToFront(self)
         
         // Background view
         // Every subview gets add to the alertBackgroundView which then
@@ -115,7 +115,7 @@ class CustomAlertView : UIView {
     // -- the alert view. If no actions are passed in, the button will
     // -- just dismiss the alert.
     // ------------------------------------------------------------
-    func buttonTap() {
+    @objc func buttonTap() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: { () -> Void in
             self.blurView.alpha = 0
             self.alertBackgroundView.alpha = 0
@@ -128,7 +128,7 @@ class CustomAlertView : UIView {
         })
     }
     
-    func cancelButtonTap() {
+    @objc func cancelButtonTap() {
         closeAlert()
         if cancel != nil {
             cancel.handler()
@@ -173,9 +173,9 @@ extension CustomAlertView {
         titleLbl.font = UIFont(name: "HelveticaNeue-Light", size: 30)
         titleLbl.text = title
         let titleString = titleLbl.text! as NSString
-        let titleAttr = [NSFontAttributeName:titleLbl.font]
+        let titleAttr = [NSAttributedString.Key.font:titleLbl.font]
         let titleSize = CGSize(width: contentWidth, height: 90)
-        let titleRect = titleString.boundingRect(with: titleSize, options: .usesLineFragmentOrigin, attributes: titleAttr, context: nil)
+        let titleRect = titleString.boundingRect(with: titleSize, options: .usesLineFragmentOrigin, attributes: titleAttr as [NSAttributedString.Key : Any], context: nil)
         yPos += padding
         titleLbl.frame = CGRect(x: padding, y: yPos, width: alertWidth-(padding*2), height: ceil(titleRect.size
             .height))
@@ -201,7 +201,7 @@ extension CustomAlertView {
         }
         textView.delegate = self
         let textString = textView.text! as NSString
-        let textAttr = [NSFontAttributeName:textView.font as AnyObject]
+        let textAttr = [NSAttributedString.Key.font:textView.font as AnyObject]
         let realSize = textView.sizeThatFits(CGSize(width: contentWidth, height: CGFloat.greatestFiniteMagnitude))//CGSizeMake(contentWidth, CGFloat.max))
         let textSize = CGSize(width: contentWidth, height: CGFloat(fmaxf(Float(90.0), Float(realSize.height))))
         let textRect = textString.boundingRect(with: textSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: textAttr, context: nil)
@@ -221,7 +221,7 @@ extension CustomAlertView {
         textView.backgroundColor = UIColor.clear
         textView.text = text
         let textString = textView.text! as NSString
-        let textAttr = [NSFontAttributeName:textView.font as AnyObject]
+        let textAttr = [NSAttributedString.Key.font:textView.font as AnyObject]
         let realSize = textView.sizeThatFits(CGSize(width: contentWidth, height: CGFloat.greatestFiniteMagnitude))//CGSizeMake(contentWidth, CGFloat.max))
         let textSize = CGSize(width: contentWidth, height: CGFloat(fmaxf(Float(90.0), Float(realSize.height))))
         let textRect = textString.boundingRect(with: textSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: textAttr, context: nil)
@@ -286,7 +286,7 @@ extension CustomAlertView {
 
 // MARK: - Text Field Delegate
 extension CustomAlertView : UITextFieldDelegate {
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         if let txt = textField.text {
             if alertType == AlertType.Email {
                 if txt.isEmail {
@@ -294,9 +294,9 @@ extension CustomAlertView : UITextFieldDelegate {
                     dismissButton.isUserInteractionEnabled = true
                 }
             } else if alertType == AlertType.PhoneNumber {
-                if txt.characters.count > 10 {
+                if txt.count > 10 {
                     textField.deleteBackward()
-                } else if txt.characters.count == 10 {
+                } else if txt.count == 10 {
                     WMShared.sharedInstance.userContact = txt
                     dismissButton.isUserInteractionEnabled = true
                 } else {
@@ -324,7 +324,7 @@ extension CustomAlertView : UITextFieldDelegate {
     
     func checkPhoneLength(text: String?) -> Bool {
         if let txt = text {
-            if txt.characters.count > 12 {
+            if txt.count > 12 {
                 return false
             } else {
                 return true
@@ -335,7 +335,7 @@ extension CustomAlertView : UITextFieldDelegate {
     }
 }
 
-// MARK: AmTrustAlertView Helpers
+// MARK: CustomAlertView Helpers
 extension CustomAlertView {
     func adjustBrightness(color:UIColor, amount:CGFloat) -> UIColor {
         var hue:CGFloat = 0
@@ -351,7 +351,7 @@ extension CustomAlertView {
     }
 }
 
-// MARK: AmTrustAlertActions
+// MARK: CustomAlertActions
 // -------------------------------------------------
 // -- These are used to call functions in the parent
 // -- class when a button on the alert view is clicked

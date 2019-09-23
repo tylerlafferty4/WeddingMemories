@@ -2,11 +2,11 @@
 //  CameraViewController.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 1/31/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import AVFoundation
 import Firebase
 
@@ -79,31 +79,36 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
         // Setup the camera session
         captureSesssion = AVCaptureSession()
-        captureSesssion.sessionPreset = AVCaptureSessionPresetPhoto
+        captureSesssion.sessionPreset = AVCaptureSession.Preset.photo
         cameraOutput = AVCapturePhotoOutput()
         
-        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        #if targetEnvironment(simulator)
+            self.capturedImage = UIImage(named: "Snapchat-1848010358")
+            self.performSegue(withIdentifier: "showPreview", sender: self)
+        #else
+            let device = AVCaptureDevice.default(for: .video)
         
-        if let input = try? AVCaptureDeviceInput(device: device) {
-            if (captureSesssion.canAddInput(input)) {
-                captureSesssion.addInput(input)
-                if (captureSesssion.canAddOutput(cameraOutput)) {
-                    captureSesssion.addOutput(cameraOutput)
-                    previewLayer = AVCaptureVideoPreviewLayer(session: captureSesssion)
-                    let bounds:CGRect = self.view.layer.bounds
-                    previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                    previewLayer?.bounds = bounds
-                    previewLayer?.position = CGPoint(x: bounds.midX, y: bounds.midY)
-                    previewLayer.connection.videoOrientation = .landscapeRight
-                    previewView.layer.addSublayer(previewLayer)
-                    captureSesssion.startRunning()
+            if let input = try? AVCaptureDeviceInput(device: device!) {
+                if (captureSesssion.canAddInput(input)) {
+                    captureSesssion.addInput(input)
+                    if (captureSesssion.canAddOutput(cameraOutput)) {
+                        captureSesssion.addOutput(cameraOutput)
+                        previewLayer = AVCaptureVideoPreviewLayer(session: captureSesssion)
+                        let bounds:CGRect = self.view.layer.bounds
+                        previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+                        previewLayer?.bounds = bounds
+                        previewLayer?.position = CGPoint(x: bounds.midX, y: bounds.midY)
+                        previewLayer.connection!.videoOrientation = .landscapeRight
+                        previewView.layer.addSublayer(previewLayer)
+                        captureSesssion.startRunning()
+                    }
+                } else {
+                    print("This device does not have input")
                 }
             } else {
-                print("This device does not have input")
+                print("This device does not have a camera")
             }
-        } else {
-            print("This device does not have a camera")
-        }
+        #endif
     }
     
     /// Top Button to dismiss the camera
@@ -141,7 +146,7 @@ extension CameraViewController {
     }
     
     /// Updates the countdown label
-    func countdownText() {
+    @objc func countdownText() {
         secondsRemaining -= 1
         // Update the label to show how many seconds are remaining
         countdownLbl.text = "\(secondsRemaining)"
@@ -165,34 +170,47 @@ extension CameraViewController {
         cameraOutput.capturePhoto(with: settings, delegate: self)
     }
     
-    // callBack from take picture
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
-        if let error = error {
-            print("error occured : \(error.localizedDescription)")
-        }
-        if  let sampleBuffer = photoSampleBuffer,
-            let previewBuffer = previewPhotoSampleBuffer,
-            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer) {
-            print(UIImage(data: dataImage)?.size as Any)
-            
-            let dataProvider = CGDataProvider(data: dataImage as CFData)
+        if let dataImg = photo.fileDataRepresentation() {
+            let dataProvider = CGDataProvider(data: dataImg as CFData)
             let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
-//            let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
+
             let image = UIImage(cgImage: cgImageRef)//, scale: 1.0, orientation: nil)
             
             capturedImage = image
             performSegue(withIdentifier: "showPreview", sender: self)
-        } else {
-            print("Error Occurred trying to take a photo")
         }
+        
     }
+    // callBack from take picture
+//    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+//
+//        if let error = error {
+//            print("error occured : \(error.localizedDescription)")
+//        }
+//        if  let sampleBuffer = photoSampleBuffer,
+//            let previewBuffer = previewPhotoSampleBuffer,
+//            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer) {
+//            print(UIImage(data: dataImage)?.size as Any)
+//
+//            let dataProvider = CGDataProvider(data: dataImage as CFData)
+//            let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
+//            //            let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
+//            let image = UIImage(cgImage: cgImageRef)//, scale: 1.0, orientation: nil)
+//
+//            capturedImage = image
+//            performSegue(withIdentifier: "showPreview", sender: self)
+//        } else {
+//            print("Error Occurred trying to take a photo")
+//        }
+//    }
 }
 
 // MARK: - Helpers
 extension CameraViewController {
     /// Shrinks and expands the view to show affordability
-    func showTap() {
+    @objc func showTap() {
         UIView.animate(withDuration: 0.2, animations: {
             self.photoCapture.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             self.captureView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -202,9 +220,7 @@ extension CameraViewController {
                 self.captureView.transform = CGAffineTransform.identity
             }, completion: { (bool) in
                 // The animation is complete, take a photo
-//                self.capturePhoto()
-                self.capturedImage = UIImage(named: "Snapchat-1848010358")
-                self.performSegue(withIdentifier: "showPreview", sender: self)
+                self.capturePhoto()
             })
             
         }

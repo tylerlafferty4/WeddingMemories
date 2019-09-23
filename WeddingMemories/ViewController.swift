@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  WeddingMemories
 //
-//  Created by Tyler Lafferty on 1/24/17.
-//  Copyright © 2017 Tyler Lafferty. All rights reserved.
+//  Created by Tyler Lafferty on 9/7/19.
+//  Copyright © 2019 Tyler Lafferty. All rights reserved.
 //
 
 import UIKit
@@ -11,7 +11,7 @@ import MessageUI
 import Firebase
 
 class ViewController: UIViewController, UINavigationControllerDelegate {
-
+    
     // -- Outlets --
     @IBOutlet var imgView: UIImageView!
     @IBOutlet var photoBtn: UIButton!
@@ -54,17 +54,17 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         
         // If we have images to display on screen saver, start a inactivity timer to then display the screen saver
         if WMShared.sharedInstance.imageNames.count > 0 {
-            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(ViewController.displayScreenSaver), userInfo: nil, repeats: false)
+            timer = Timer.scheduledTimer(timeInterval: SCREEN_SAVER_DELAY, target: self, selector: #selector(ViewController.displayScreenSaver), userInfo: nil, repeats: false)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     /// Brings up the screensaver view
-    func displayScreenSaver() {
+    @objc func displayScreenSaver() {
         self.performSegue(withIdentifier: "showScreensaver", sender: self)
     }
     
@@ -120,7 +120,7 @@ extension ViewController {
 // MARK: - Prepare for segue
 extension ViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
     }
 }
 
@@ -128,7 +128,7 @@ extension ViewController {
 extension ViewController {
     
     /// Display the camera
-    func showCamera() {
+    @objc func showCamera() {
         if timer != nil {
             timer.invalidate()
         }
@@ -137,7 +137,7 @@ extension ViewController {
     }
     
     /// Animate the circle image view to show affordability
-    func showTap() {
+    @objc func showTap() {
         UIView.animate(withDuration: 0.2, animations: {
             self.imgView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             self.circleView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -148,7 +148,9 @@ extension ViewController {
             }, completion: { (bool) in
                 self.showCamera()
             })
-        
+            
         }
     }
 }
+
+
