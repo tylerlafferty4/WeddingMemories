@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import MessageUI
+import VideoToolbox
+import Firebase
 
 var SCREEN_SAVER_DELAY=5.0
 var SCREEN_SAVER_SLIDE_TIME=10.0
@@ -21,6 +23,30 @@ class WMShared {
     var brideGroom: String = "Tyler & Roberta"
     var imageNames: [String] = []
     var screenSaverIndex: Int = 0
+    
+    class func uploadPhotos(photos: [UIImage]) {
+        for photo in photos {
+             if let imgData: Data = photo.pngData() {
+            
+                // Create an image name to use
+                let imageName = "\(self.getUniqueFileName())"
+    
+                // Create a reference to the file you want to upload
+                let imageRef = Storage.storage().reference().child("\(WMShared.sharedInstance.brideGroom)/\(imageName)")
+                
+                imageRef.putData(imgData)
+                
+                //            let uploadTask = imageRef.putData(imgData, metadata: nil)
+            }
+        }
+    }
+    
+    /// Returns a unique file name for saving to Firebase
+    class func getUniqueFileName() -> String {
+        let uuid = UUID().uuidString
+        let fileName = "\(uuid).png"
+        return fileName
+    }
 }
 
 extension String {
@@ -103,4 +129,16 @@ extension UIImage {
             renderContext.cgContext.draw(cgImage, in: drawRect)
         }
     }
+    
+    static func convertToUIImage(buffer: CVPixelBuffer) -> UIImage?{
+        let ciImage = CIImage(cvPixelBuffer: buffer)
+        let temporaryContext = CIContext(options: nil)
+        if let temporaryImage = temporaryContext.createCGImage(ciImage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer)))
+        {
+            let capturedImage = UIImage(cgImage: temporaryImage)
+            return capturedImage
+        }
+        return nil
+    }
 }
+

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BE5F67F3377A914BA68E9052 /* Pods_WeddingMemories.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD806FCDC1F57F097E5D2AF1 /* Pods_WeddingMemories.framework */; };
+		D87FB7BC24576A5400C6911E /* PreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87FB7BB24576A5400C6911E /* PreviewCollectionViewCell.swift */; };
 		D8CB0B1C2323CF1100C45FC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CB0B1B2323CF1100C45FC9 /* AppDelegate.swift */; };
 		D8CB0B1E2323CF1100C45FC9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CB0B1D2323CF1100C45FC9 /* ViewController.swift */; };
 		D8CB0B232323CF1600C45FC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8CB0B222323CF1600C45FC9 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		514C02C92BBDC20CEC1B2F14 /* Pods-WeddingMemories.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeddingMemories.release.xcconfig"; path = "Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories.release.xcconfig"; sourceTree = "<group>"; };
 		A155886AD40FACC9C3D56569 /* Pods-WeddingMemories.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeddingMemories.debug.xcconfig"; path = "Target Support Files/Pods-WeddingMemories/Pods-WeddingMemories.debug.xcconfig"; sourceTree = "<group>"; };
 		AD806FCDC1F57F097E5D2AF1 /* Pods_WeddingMemories.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeddingMemories.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D87FB7BB24576A5400C6911E /* PreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		D8CB0B182323CF1100C45FC9 /* WeddingMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddingMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CB0B1B2323CF1100C45FC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8CB0B1D2323CF1100C45FC9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				D8CB0B332323D2BC00C45FC9 /* PreviewViewController.swift */,
 				D8CB0B352323D58B00C45FC9 /* CustomAlertView.swift */,
 				D8CB0B392323DA6000C45FC9 /* ScreenSaverViewController.swift */,
+				D87FB7BB24576A5400C6911E /* PreviewCollectionViewCell.swift */,
 			);
 			path = WeddingMemories;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 				D8CB0B362323D58C00C45FC9 /* CustomAlertView.swift in Sources */,
 				D8CB0B1E2323CF1100C45FC9 /* ViewController.swift in Sources */,
 				D8CB0B322323D21700C45FC9 /* CameraViewController.swift in Sources */,
+				D87FB7BC24576A5400C6911E /* PreviewCollectionViewCell.swift in Sources */,
 				D8CB0B3A2323DA6000C45FC9 /* ScreenSaverViewController.swift in Sources */,
 				D8CB0B1C2323CF1100C45FC9 /* AppDelegate.swift in Sources */,
 				D8CB0B342323D2BC00C45FC9 /* PreviewViewController.swift in Sources */,
@@ -370,6 +374,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 34M84A79JV;
 				INFOPLIST_FILE = WeddingMemories/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -377,7 +382,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lafferty.WeddingMemories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -389,6 +394,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 34M84A79JV;
 				INFOPLIST_FILE = WeddingMemories/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -396,7 +402,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lafferty.WeddingMemories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

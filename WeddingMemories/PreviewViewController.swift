@@ -13,7 +13,6 @@ import MessageUI
 class PreviewViewController: UIViewController {
     
     // -- Outlets --
-    @IBOutlet var previewImgView: UIImageView!
     @IBOutlet var usePhotoBtn: UIButton!
     @IBOutlet var retakeBtn: UIButton!
     @IBOutlet var loadingView: UIView!
@@ -21,6 +20,11 @@ class PreviewViewController: UIViewController {
     @IBOutlet var loadPercent: UILabel!
     @IBOutlet var sendChoices: UIView!
     @IBOutlet var viewProg: UIView! // your parent view, Just a blank view
+    @IBOutlet weak var takePhoto1: UIImageView!
+    @IBOutlet weak var takePhoto2: UIImageView!
+    @IBOutlet weak var takePhoto3: UIImageView!
+    @IBOutlet weak var takePhoto4: UIImageView!
+    @IBOutlet weak var takePhoto5: UIImageView!
     
     // -- Vars --
     var choicesShown: Bool = false
@@ -32,7 +36,7 @@ class PreviewViewController: UIViewController {
     var blur: UIVisualEffectView!
     
     // -- Set from other controller --
-    var takenPhoto: UIImage!
+    var takenPhotos: [UIImage]!
     
     // -- Firebase Storage --
     var storage = Storage.storage()
@@ -44,12 +48,12 @@ class PreviewViewController: UIViewController {
         // FireBase storage init
         storageRef = storage.reference()
         
-        // Set the preview to image that was taken
-        previewImgView.image = takenPhoto
+//        // Set the preview to image that was taken
+//        previewImgView.image = takenPhoto1
         
         // Add Tap gesture to image view to dismiss choices
         let tap = UITapGestureRecognizer(target: self, action: #selector(PreviewViewController.touchedView))
-        previewImgView.addGestureRecognizer(tap)
+//        previewImgView.addGestureRecognizer(tap)
         
         sendChoices.layer.cornerRadius = viewCornerRadius
         sendChoices.layer.shadowColor = UIColor.black.cgColor
@@ -72,6 +76,12 @@ class PreviewViewController: UIViewController {
         
         // Detect faces
         detect()
+        
+        takePhoto1.image = takenPhotos[0]
+        takePhoto2.image = takenPhotos[1]
+        takePhoto3.image = takenPhotos[2]
+        takePhoto4.image = takenPhotos[3]
+//        takePhoto5.image = takenPhotos[4]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +91,20 @@ class PreviewViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+}
+
+// MARK: - CollectionView
+extension PreviewViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "previewCell", for: indexPath) as! PreviewCollectionViewCell
+        cell.imgView.image = takenPhotos[indexPath.row]
+        return cell
     }
 }
 
@@ -122,73 +146,75 @@ extension PreviewViewController {
     
     /// Uploads the image to FireBase
     func uploadPhoto() {
+        WMShared.uploadPhotos(photos: takenPhotos)
+        displaySentAlert()
         // Add the image as an attachment
-        if let imgData: Data = takenPhoto.pngData() {
-            
-            // Create an image name to use
-            let imageName = "\(getUniqueFileName())"
-            
-            // Create a reference to the file you want to upload
-            let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(imageName)")
-            
-            // Show the loader to the user
-            self.unhideLoader()
-            
-            // Upload the file
-            let uploadTask = imageRef.putData(imgData, metadata: nil) { (metadata, error) in
-                guard metadata != nil else {
-                    // Uh-oh, an error occurred!
-                    print("******An Error Occurred******")
-                    
-                    // Hide the loader
-                    self.hideLoader()
-                    
-                    // Display failed message
-                    self.displayFailedAlert()
-                    return
-                }
-                
-                // Metadata contains file metadata such as size, content-type, and download URL.
-                //                let downloadURL = metadata.downloadURL
-                
-                // Append to images array in order to use on screen saver now
-                WMShared.sharedInstance.imageNames.append(imageName)
-                
-                // Save the image to the device for use on the screen saver
-                self.addImageToDocuments(img: self.takenPhoto, name: imageName)
-                
-                // Hide the loading view upon completion
-                self.hideLoader()
-                
-                // Image has been uploaded. Display the success alert
-                self.displaySentAlert()
-            }
-            
-            // Track the progress of the upload
-            _ = uploadTask.observe(.progress) { snapshot in
-                // A progress event occured
-                print("Progress -> \(String(describing: snapshot.progress))")
-                
-                // Update the label with the percent complete
-                let percentComplete = 100 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-                let rounded = Int(percentComplete.rounded())
-                self.loadPercent.text = "\(rounded)%"
-                
-                // Update the progress bar
-                let progress = Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-                let prog = progress * Double(self.viewProg.bounds.width - 10)
-                self.rectProgress(incremented: CGFloat(prog))
-            }
-        } else {
-            // Uh-oh, an error occurred!
-            print("******An Error Occurred******")
-            
-            // Hide the loader
-            self.hideLoader()
-            
-            // Display failed message
-            self.displayFailedAlert()
-        }
+//        if let imgData: Data = takenPhoto.pngData() {
+//
+//            // Create an image name to use
+//            let imageName = "\(getUniqueFileName())"
+//
+//            // Create a reference to the file you want to upload
+//            let imageRef = storageRef.child("\(WMShared.sharedInstance.brideGroom)/\(imageName)")
+//
+//            // Show the loader to the user
+//            self.unhideLoader()
+//
+//            // Upload the file
+//            let uploadTask = imageRef.putData(imgData, metadata: nil) { (metadata, error) in
+//                guard metadata != nil else {
+//                    // Uh-oh, an error occurred!
+//                    print("******An Error Occurred******")
+//
+//                    // Hide the loader
+//                    self.hideLoader()
+//
+//                    // Display failed message
+//                    self.displayFailedAlert()
+//                    return
+//                }
+//
+//                // Metadata contains file metadata such as size, content-type, and download URL.
+//                //                let downloadURL = metadata.downloadURL
+//
+//                // Append to images array in order to use on screen saver now
+//                WMShared.sharedInstance.imageNames.append(imageName)
+//
+//                // Save the image to the device for use on the screen saver
+//                self.addImageToDocuments(img: self.takenPhoto, name: imageName)
+//
+//                // Hide the loading view upon completion
+//                self.hideLoader()
+//
+//                // Image has been uploaded. Display the success alert
+//                self.displaySentAlert()
+//            }
+//
+//            // Track the progress of the upload
+//            _ = uploadTask.observe(.progress) { snapshot in
+//                // A progress event occured
+//                print("Progress -> \(String(describing: snapshot.progress))")
+//
+//                // Update the label with the percent complete
+//                let percentComplete = 100 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+//                let rounded = Int(percentComplete.rounded())
+//                self.loadPercent.text = "\(rounded)%"
+//
+//                // Update the progress bar
+//                let progress = Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+//                let prog = progress * Double(self.viewProg.bounds.width - 10)
+//                self.rectProgress(incremented: CGFloat(prog))
+//            }
+//        } else {
+//            // Uh-oh, an error occurred!
+//            print("******An Error Occurred******")
+//
+//            // Hide the loader
+//            self.hideLoader()
+//
+//            // Display failed message
+//            self.displayFailedAlert()
+//        }
     }
 }
 
@@ -197,29 +223,32 @@ extension PreviewViewController {
     
     /// Call this method to ask the user for their email address
     func promptForEmail() {
-        let emailAlert = CustomAlertView()
-        let confirm = CustomAlertAction(title: "Upload") {
-            // Email has been entered, begin upload of file
-            self.sendEmail(toEmail: WMShared.sharedInstance.userContact, withImg: self.takenPhoto.pngData()!)
+        let alert = UIAlertController(title: "Wedding Memories", message: "Please enter your email address", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Upload", style: .default, handler: { (action) in
+            let textField = alert.textFields![0] as UITextField
+//            self.sendEmail(toEmail: textField.text!, withImg: self.takenPhoto.pngData()!)
             self.uploadPhoto()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addTextField { (textField) in
+            textField.placeholder = "example@gmail.com"
         }
-        let cancel = CustomAlertAction(title: "Cancel") {
-            
-        }
-        emailAlert.showAlertView(superview: self.view, title: "Please enter your email address", text: "example@gmail.com", type: .Email, img: nil, confirmAction: confirm, cancelAction: cancel)
+        present(alert, animated: true, completion: nil)
     }
     
     /// Call this method to ask the user for their phone number
     func promptForPhoneNumber() {
-        let emailAlert = CustomAlertView()
-        let confirm = CustomAlertAction(title: "Upload") {
-            // Phone Number has been entered, begin upload of file
+        let alert = UIAlertController(title: "Wedding Memories", message: "Please enter your phone number", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Upload", style: .default, handler: { (action) in
+            let textField = alert.textFields![0] as UITextField
+//            self.sendEmail(toEmail: textField.text!, withImg: self.takenPhoto.pngData()!)
             self.uploadPhoto()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addTextField { (textField) in
+            textField.placeholder = "4441235555"
         }
-        let cancel = CustomAlertAction(title: "Cancel") {
-            
-        }
-        emailAlert.showAlertView(superview: self.view, title: "Please enter your phone number", text: "Phone Number", type: .PhoneNumber, img: nil, confirmAction: confirm, cancelAction: cancel)
+        present(alert, animated: true, completion: nil)
     }
     
     /// Call this method after the photo has been uploaded
@@ -270,9 +299,9 @@ extension PreviewViewController {
     func addImageToDocuments(img : UIImage, name : String) {
         let fileManager = FileManager.default
         let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(name).jpg")
-        let image = self.takenPhoto
-        let imageData = image?.jpegData(compressionQuality: 0.5)
-        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
+//        let image = self.takenPhoto
+//        let imageData = image?.jpegData(compressionQuality: 0.5)
+//        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
     }
     
     /// Used to display the choices popup

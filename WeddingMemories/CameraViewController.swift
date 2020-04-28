@@ -25,9 +25,10 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     var captureSesssion: AVCaptureSession!
     var cameraOutput: AVCapturePhotoOutput!
     var previewLayer: AVCaptureVideoPreviewLayer!
-    var capturedImage: UIImage!
+    var capturedImages: [UIImage]! = []
     var secondsRemaining: Int = 10
     var timer: Timer! = Timer()
+    var photosTaken = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +66,8 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         countdownLbl.layer.shadowOffset = CGSize(width: 0, height: 20)
         countdownLbl.layer.shadowOpacity = 8
         countdownLbl.layer.shadowRadius = 20
+        
+        capturedImages = []
         
     }
     
@@ -177,9 +180,13 @@ extension CameraViewController {
             let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
 
             let image = UIImage(cgImage: cgImageRef)//, scale: 1.0, orientation: nil)
-            
-            capturedImage = image
-            performSegue(withIdentifier: "showPreview", sender: self)
+            capturedImages.append(image)
+            if capturedImages.count == 4 {
+                performSegue(withIdentifier: "showPreview", sender: self)
+            } else {
+                secondsRemaining = 5
+                beginTimer()
+            }
         }
         
     }
@@ -232,7 +239,7 @@ extension CameraViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! PreviewViewController
         // Set the image so the user can Preview the image on the next page
-        vc.takenPhoto = capturedImage
+        vc.takenPhotos = capturedImages
     }
 }
 
